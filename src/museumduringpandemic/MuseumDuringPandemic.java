@@ -1,13 +1,12 @@
 package museumduringpandemic;
 
-import museum.Museum;
-import museum.TicketCounter;
+import Simulator.Simulator;
 
 public class MuseumDuringPandemic {
 
     public static void main(String[] args) {
-        Museum museum = new Museum();
-
+        Simulator sim = new Simulator();
+        sim.startSimulate();
 
     }
 

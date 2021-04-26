@@ -1,82 +1,58 @@
 package museum;
 
 import constant.Constant;
-import java.util.LinkedList;
-import java.util.Queue;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TicketCounter {
 
     private boolean isOperating;
-    private Queue<Ticket> ticketQueue;
+    private int numberOfTicketSold;
 
     public TicketCounter() {
         this.isOperating = false;
-        this.ticketQueue = new LinkedList<Ticket>();
+        this.numberOfTicketSold = 0;
     }
 
-    public Queue<Ticket> getTicketQueue() {
-        return ticketQueue;
-    }
-
-    public void setTicketQueue(Queue<Ticket> ticketQueue) {
-        this.ticketQueue = ticketQueue;
-    }
-
-    public boolean getIsOperating() {
+    public boolean isOperating() {
         return isOperating;
-    }
-
-    public void setIsOperating(boolean isOperating) {
-        this.isOperating = isOperating;
-    }
-
-    public int getNumberOfRemainingTicket() {
-        return this.ticketQueue.size();
     }
 
     public void startOperate() {
         this.isOperating = true;
-        this.initTicketQueue();
     }
 
     public void stopOperate() {
         this.isOperating = false;
-        int numberOfTicketSold = Constant.MAX_VISITOR_PER_DAY - this.ticketQueue.size();
         System.out.println("Ticket counter is now closing...\nNumber of ticket(s) sold    : " + numberOfTicketSold);
     }
 
-    public synchronized void sellTicket(int ticketAmount) {
-        if (!isOperating) {
-            System.out.println("Ticket counter is not operating.");
-            return;
+    public synchronized List<Ticket> sellTicket(int ticketAmount) {
+        if (!isOperating()) {
+            System.out.println("Ticket counter is closed.");
+            return Collections.emptyList();
         }
 
-        if (ticketQueue.size() <= 0) {
-            System.out.println("Tickets had been sold out. Remaining ticket : " + ticketQueue.size());
+        if (numberOfTicketSold >= Constant.MAX_VISITOR_PER_DAY) {
+            System.out.println(numberOfTicketSold + " tickets has already been sold out.");
             stopOperate();
-            return;
+            return Collections.emptyList();
         }
 
-        if (ticketAmount > ticketQueue.size()) {
-            System.out.println("Not enough tickets for " + ticketAmount + " person(s). Remaining ticket : " + ticketQueue.size());
-            return;
+        int remainingNumberOfTicket = Constant.MAX_VISITOR_PER_DAY - numberOfTicketSold;
+        if (ticketAmount > remainingNumberOfTicket) {
+            System.out.println("Not enough tickets for " + ticketAmount + " person(s). Remaining ticket : " + remainingNumberOfTicket);
+            return Collections.emptyList();
         }
 
+        List<Ticket> soldTicketList = new ArrayList<>();
         for (int i = 0; i < ticketAmount; i++) {
-            Ticket ticketSold = ticketQueue.remove();
-            System.out.println(ticketSold.getTicketId() + " sold.");
+            soldTicketList.add(new Ticket(numberOfTicketSold + 1));
+            numberOfTicketSold++;
         }
-        System.out.println("\n\n");
-
-    }
-
-    private void initTicketQueue() {
-        this.ticketQueue.clear();
-        for (int i = 1; i <= Constant.MAX_VISITOR_PER_DAY; i++) {
-            String ticketId = Constant.TICKET_ID_TEMPLATE + i;
-            this.ticketQueue.add(new Ticket(ticketId));
-        }
-        System.out.println(ticketQueue.size() + " ticket(s) are ready.");
+        return soldTicketList;
     }
 
 }

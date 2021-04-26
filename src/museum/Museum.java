@@ -1,6 +1,7 @@
 package museum;
 
-import Turnstile.*;
+import turnstile.*;
+import constant.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +13,10 @@ public class Museum {
     private int numberOfCurrentVisitor;
     private boolean isOpen;
     private Map<String, List<Turnstile>> turnstileMap;
-    private TicketCounter counter;
 
     public Museum() {
         this.numberOfCurrentVisitor = 0;
         this.isOpen = false;
-        this.counter = new TicketCounter();
         initTurnstileMap();
     }
 
@@ -27,10 +26,12 @@ public class Museum {
         this.turnstileMap.put("ENTRANCE", new ArrayList<>());
         this.turnstileMap.put("EXIT", new ArrayList<>());
 
-        this.turnstileMap.get("ENTRANCE").add(new EntranceTurnstile("ENTRANCE_1"));
-        this.turnstileMap.get("ENTRANCE").add(new EntranceTurnstile("ENTRANCE_2"));
-        this.turnstileMap.get("EXIT").add(new EntranceTurnstile("EXIT_1"));
-        this.turnstileMap.get("EXIT").add(new EntranceTurnstile("EXIT_2"));
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                this.turnstileMap.get("ENTRANCE").add(new EntranceTurnstile(Constant.ENTRANCE_TURNSTILE_LIST.get(i) + (j + 1)));
+                this.turnstileMap.get("EXIT").add(new ExitTurnstile(Constant.EXIT_TURNSTILE_LIST.get(i) + (j + 1)));
+            }
+        }
     }
 
     public boolean isOpen() {
@@ -45,16 +46,12 @@ public class Museum {
         return numberOfCurrentVisitor;
     }
 
-    public void setNumberOfCurrentVisitor(int numberOfCurrentVisitor) {
-        this.numberOfCurrentVisitor = numberOfCurrentVisitor;
-    }
+    public void setNumberOfCurrentVisitor(int numberOfCurrentVisitor) { this.numberOfCurrentVisitor = numberOfCurrentVisitor; }
 
-    //  Set museum's operating status to true.
     public void startBusiness() {
         this.isOpen = true;
     }
 
-    //  Set museum's operating status to false.
     public void endBusiness() {
         this.isOpen = false;
     }
@@ -65,5 +62,13 @@ public class Museum {
 
     public void removeVisitor() {
         numberOfCurrentVisitor--;
+    }
+
+    public Map<String, List<Turnstile>> getTurnstileMap() {
+        return turnstileMap;
+    }
+
+    public void setTurnstileMap(Map<String, List<Turnstile>> turnstileMap) {
+        this.turnstileMap = turnstileMap;
     }
 }
