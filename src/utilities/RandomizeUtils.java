@@ -14,4 +14,8 @@ public final class RandomizeUtils {
         return r.nextInt(4) + 1;
     }
 
+    public static int randomizeNumberOfTicketSold() {
+        Random r = new Random();
+        return r.nextInt(4) + 1;
+    }
 }
