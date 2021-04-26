@@ -18,31 +18,18 @@ public class SellTicket implements Runnable {
         this.ticketList = new ArrayList<>();
     }
 
+    public List<Ticket> getTicketList() {
+        return ticketList;
+    }
+
     @Override
     public void run() {
         ticketList = counter.sellTicket(ticketAmount);
-
-        if (ticketList != null && ticketList.size() != 0) {
-            printStatement(ticketList);
-        }
-
         try {
-            Thread.sleep(1000);
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private void printStatement(List<Ticket> ticketList) {
-        StringBuilder ticketIds = new StringBuilder();
-        for (int i = 0; i < ticketList.size(); i++) {
-            Ticket t = ticketList.get(i);
-            ticketIds.append(t.getTicketId()).append("[").append(t.getStayTimeInMinute()).append("]");
-            if (i != ticketList.size() - 1) {
-                ticketIds.append(", ");
-            }
-        }
-        System.out.println(ticketIds + " sold.");
     }
 
 }

@@ -28,8 +28,8 @@ public class Museum {
 
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
-                this.turnstileMap.get("ENTRANCE").add(new EntranceTurnstile(Constant.ENTRANCE_TURNSTILE_LIST.get(i) + (j + 1)));
-                this.turnstileMap.get("EXIT").add(new ExitTurnstile(Constant.EXIT_TURNSTILE_LIST.get(i) + (j + 1)));
+                this.turnstileMap.get("ENTRANCE").add(new EntranceTurnstile(Constant.ENTRANCE_TURNSTILE_LIST.get(i) + "T" +(j + 1)));
+                this.turnstileMap.get("EXIT").add(new ExitTurnstile(Constant.EXIT_TURNSTILE_LIST.get(i) + "T" + (j + 1)));
             }
         }
     }
