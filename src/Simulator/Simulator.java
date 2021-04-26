@@ -48,7 +48,7 @@ public class Simulator {
             if (nextSellTicketDateTime.equals(currentTimeCal)) {
                 List<Ticket> ticketSoldList = sellTicket();
                 if (ticketSoldList != null && !ticketSoldList.isEmpty()) {
-                    printSellTicketMsg(toTimeString(currentTimeCal), ticketSoldList);
+                    printSellTicketMsg(CalendarUtils.toHHmmString(currentTimeCal), ticketSoldList);
                     nextSellTicketDateTime.add(MINUTE, RandomizeUtils.randomizeGapBetweenTicketPurchases());
                 }
             }
@@ -69,10 +69,6 @@ public class Simulator {
         }
         msg += " sold.";
         System.out.println(msg);
-    }
-
-    public String toTimeString(Calendar time) {
-        return String.format("%02d:%02d", time.get(Calendar.HOUR_OF_DAY), time.get(MINUTE));
     }
 
     public List<Ticket> sellTicket() {
