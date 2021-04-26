@@ -24,4 +24,8 @@ public final class Constant {
     public static final List<String> ENTRANCE_TURNSTILE_LIST = Arrays.asList(SOUTH_ENTRANCE, NORTH_ENTRANCE);
     public static final List<String> EXIT_TURNSTILE_LIST = Arrays.asList(EAST_EXIT, WEST_EXIT);
 
+    public static final String MUSEUM_START_TIME = "09:00";
+    public static final String MUSEUM_END_TIME = "18:00";
+    public static final String TICKET_COUNTER_END_TIME = "17:00";
+    public static final String TICKET_COUNTER_START_TIME = "08:00";
 }
