@@ -1,4 +1,4 @@
-package Turnstile;
+package turnstile;
 
 import museum.Museum;
 

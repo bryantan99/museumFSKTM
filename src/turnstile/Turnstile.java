@@ -1,5 +1,9 @@
-package Turnstile;
+package turnstile;
 
+import museum.Ticket;
+
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -8,12 +12,14 @@ public abstract class Turnstile {
     private ReentrantReadWriteLock readWriteLock;
     private Lock readLock;
     private Lock writeLock;
+    private Queue<Ticket> queue;
 
     public Turnstile(String turnstileId) {
         this.turnstileId = turnstileId;
         this.readWriteLock = new ReentrantReadWriteLock();
         this.readLock = this.readWriteLock.readLock();
         this.writeLock = this.readWriteLock.writeLock();
+        this.queue = new LinkedList<>();
     }
 
     public String getTurnstileId() {
@@ -47,4 +53,8 @@ public abstract class Turnstile {
     public void setWriteLock(Lock writeLock) {
         this.writeLock = writeLock;
     }
+
+    public Queue<Ticket> getQueue() { return queue; }
+
+    public void setQueue(Queue<Ticket> queue) { this.queue = queue; }
 }

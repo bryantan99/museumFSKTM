@@ -1,5 +1,9 @@
 package constant;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public final class Constant {
 
     // Maximum number of visitors / tickets to be sold per day.
@@ -10,5 +14,21 @@ public final class Constant {
 
     // Ticket ID template
     public static final String TICKET_ID_TEMPLATE = "T";
+
+    // Turnstile Entrance and Exit
+    public static final String SOUTH_ENTRANCE = "SE";
+    public static final String NORTH_ENTRANCE = "NE";
+    public static final String EAST_EXIT = "EE";
+    public static final String WEST_EXIT = "WE";
+    public static final List<String> ENTRANCE_TURNSTILE_LIST = Arrays.asList(SOUTH_ENTRANCE, NORTH_ENTRANCE);
+    public static final List<String> EXIT_TURNSTILE_LIST = Arrays.asList(EAST_EXIT, WEST_EXIT);
+
+    // Start time
+    public static final String START_TIME = "08:00";
+    public static final String END_TIME = "18:00";
+    public static final String MUSEUM_START_TIME = "09:00";
+    public static final String MUSEUM_END_TIME = "18:00";
+    public static final String TICKET_COUNTER_START_TIME = "08:00";
+    public static final String TICKET_COUNTER_END_TIME = "17:00";
 
 }
