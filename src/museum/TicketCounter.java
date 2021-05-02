@@ -28,7 +28,8 @@ public class TicketCounter {
 
     public void stopOperate(Calendar closingTime) {
         this.isOperating = false;
-        System.out.println(CalendarUtils.toHHmmString(closingTime) + " - Ticket counter is now closing...\nNumber of ticket(s) sold    : " + numberOfTicketSold);
+        String closeMsg = CalendarUtils.toHHmmString(closingTime) + " - Ticket counter is closed.";
+        System.out.printf("%-40s [No. of tickets sold : %-3d]\n", closeMsg, numberOfTicketSold);
     }
 
     public synchronized List<Ticket> sellTicket(Calendar sellTime, int ticketAmount) {
@@ -54,7 +55,21 @@ public class TicketCounter {
             soldTicketList.add(new Ticket(numberOfTicketSold + 1));
             numberOfTicketSold++;
         }
+        printSellTicket(sellTime, soldTicketList);
         return soldTicketList;
+    }
+
+    private void printSellTicket(Calendar timestamp, List<Ticket> soldTicketList) {
+        if (soldTicketList != null && !soldTicketList.isEmpty()) {
+            StringBuilder ticketIds = new StringBuilder();
+            for (int i = 0; i < soldTicketList.size(); i++) {
+                ticketIds.append(soldTicketList.get(i).getTicketId());
+                if (i != soldTicketList.size() - 1) {
+                    ticketIds.append(", ");
+                }
+            }
+            System.out.println(CalendarUtils.toHHmmString(timestamp) + " - " + ticketIds + " sold.");
+        }
     }
 
 }

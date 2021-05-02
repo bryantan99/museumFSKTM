@@ -4,124 +4,193 @@ import constant.Constant;
 import museum.Museum;
 import museum.Ticket;
 import museum.TicketCounter;
-import runnable.AddVisitor;
-import runnable.DeleteVisitor;
-import runnable.SellTicket;
 import utilities.CalendarUtils;
 import utilities.RandomizeUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static java.util.Calendar.MINUTE;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Simulator {
+
+    private volatile Calendar currentTime;
+    private volatile Calendar nextTicketSellTime;
+
+    private ExecutorService es;
     private Museum museum;
     private TicketCounter counter;
-    private List<Ticket> ticketPool;
-    private Map<String, List<Ticket>> leaveScheduledEventMap;
 
-    public Simulator() {
+    private List<Ticket> ticketPool;
+    private Map<String, List<Ticket>> ticketLeavingTimeMap;
+
+    private final Calendar TICKET_COUNTER_END_TIME = CalendarUtils.parseTimeInHHmm(Constant.TICKET_COUNTER_END_TIME);
+    private final Calendar TICKET_COUNTER_START_TIME = CalendarUtils.parseTimeInHHmm(Constant.TICKET_COUNTER_START_TIME);
+    private final Calendar MUSEUM_END_TIME = CalendarUtils.parseTimeInHHmm(Constant.MUSEUM_END_TIME);
+    private final Calendar MUSEUM_START_TIME = CalendarUtils.parseTimeInHHmm(Constant.MUSEUM_START_TIME);
+    private final Calendar MUSEUM_LAST_ENTRY_TIME = CalendarUtils.parseTimeInHHmm(Constant.MUSEUM_LAST_ENTRY_TIME);
+
+
+    public Simulator() throws ParseException {
+        this.es = Executors.newFixedThreadPool(4);
+        this.currentTime = CalendarUtils.parseTimeInHHmm(Constant.TICKET_COUNTER_START_TIME);
+        this.nextTicketSellTime = CalendarUtils.parseTimeInHHmm(Constant.TICKET_COUNTER_START_TIME);
         this.museum = new Museum();
         this.counter = new TicketCounter();
         this.ticketPool = new ArrayList<>();
-        this.leaveScheduledEventMap = new HashMap<>();
+        this.ticketLeavingTimeMap = new HashMap<>();
     }
 
-    public void startSimulate() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    public void startSimulate() {
+        es.submit(new Thread(new IncrementTime()));
+        es.submit(new Thread(new SellTicket()));
+        es.submit(new Thread(new EnterMuseum()));
+        es.submit(new Thread(new ExitMuseum()));
+        es.shutdown();
+    }
 
-        Date startTimeDate = sdf.parse(Constant.TICKET_COUNTER_START_TIME);
-        Date endTimeDate = sdf.parse(Constant.MUSEUM_END_TIME);
+    private class IncrementTime implements Runnable {
+        @Override
+        public void run() {
+            Calendar localCurrentTime = currentTime;
+            while (localCurrentTime.before(MUSEUM_END_TIME) || localCurrentTime.equals(MUSEUM_END_TIME) || !museum.getVisitorList().isEmpty()) {
+                if (localCurrentTime.equals(TICKET_COUNTER_START_TIME)) {
+                    counter.startOperate();
+                } else if (localCurrentTime.equals(TICKET_COUNTER_END_TIME)) {
+                    counter.stopOperate(localCurrentTime);
+                } else if (localCurrentTime.equals(MUSEUM_START_TIME)) {
+                    museum.startBusiness();
+                } else if (localCurrentTime.equals(MUSEUM_END_TIME)) {
+                    museum.endBusiness();
+                } else if (localCurrentTime.equals(MUSEUM_LAST_ENTRY_TIME)) {
+                    museum.offEntranceTurnstile(localCurrentTime);
+                }
 
-        Calendar currentTimeCal = Calendar.getInstance();
-        Calendar endTimeCal = Calendar.getInstance();
-        currentTimeCal.setTime(startTimeDate);
-        endTimeCal.setTime(endTimeDate);
-
-        counter.startOperate();
-        Calendar nextSellTicketDateTime = Calendar.getInstance();
-        nextSellTicketDateTime.setTime(startTimeDate);
-
-        while (!currentTimeCal.after(endTimeCal)) {
-
-            if (currentTimeCal.equals(CalendarUtils.parseTimeInHHmm(Constant.TICKET_COUNTER_END_TIME))) {
-                counter.stopOperate(currentTimeCal);
+                currentTime.add(Calendar.MINUTE, 1);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        }
+    }
 
-            if (nextSellTicketDateTime.equals(currentTimeCal) && counter.isOperating()) {
-                boolean hasTicketSold = sellTicket(currentTimeCal);
-                if (hasTicketSold) {
-                    nextSellTicketDateTime.add(MINUTE, RandomizeUtils.randomizeGapBetweenTicketPurchases());
+    private class SellTicket implements Runnable {
+        @Override
+        public void run() {
+            Calendar localCurrentTime = currentTime;
+            Calendar localNextSellTicketTime = nextTicketSellTime;
+
+            while (counter.isOperating()) {
+                if (!localCurrentTime.equals(currentTime)) {
+                    System.out.println("Current time has changed");
+                    localCurrentTime = currentTime;
+                }
+
+                if (!localNextSellTicketTime.equals(nextTicketSellTime)) {
+                    System.out.println("Next ticket sell time changed.");
+                    localNextSellTicketTime = nextTicketSellTime;
+                }
+
+                if (localCurrentTime.equals(TICKET_COUNTER_END_TIME) || localCurrentTime.after(TICKET_COUNTER_END_TIME)) {
+                    counter.stopOperate(localCurrentTime);
+                    continue;
+                }
+
+                if (localCurrentTime.equals(nextTicketSellTime) || localCurrentTime.after(nextTicketSellTime)) {
+                    List<Ticket> purchasedTicketList = counter.sellTicket(localCurrentTime, RandomizeUtils.randomizeNumberOfTicketSold());
+                    if (purchasedTicketList != null && !purchasedTicketList.isEmpty()) {
+                        ticketPool.addAll(purchasedTicketList);
+                    }
+                    nextTicketSellTime.add(Calendar.MINUTE, RandomizeUtils.randomizeGapBetweenTicketPurchases());
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
 
-            if(!ticketPool.isEmpty()) {
-                Ticket visitor = ticketPool.remove(0);
-                enterMuseum(currentTimeCal, visitor);
-                scheduleLeaveEvent(visitor);
-            }
+        }
+    }
 
-            if (leaveScheduledEventMap.containsKey(CalendarUtils.toHHmmString(currentTimeCal))) {
-                List<Ticket> leavingVisitorList = leaveScheduledEventMap.get(CalendarUtils.toHHmmString(currentTimeCal));
-                for (Ticket visitor : leavingVisitorList) {
-                    leaveMuseum(currentTimeCal, visitor);
+    private class EnterMuseum implements Runnable {
+        @Override
+        public void run() {
+            Calendar localCurrentTime = currentTime;
+            Calendar localEndTime = MUSEUM_END_TIME;
+
+            while (!localCurrentTime.after(localEndTime)) {
+                if (!localCurrentTime.equals(currentTime)) {
+                    System.out.println("Current time has changed.");
+                    localCurrentTime = currentTime;
+                }
+
+                if (museum.isOpen() && !ticketPool.isEmpty() && museum.getVisitorList().size() < Constant.MAX_VISITOR_IN_MUSEUM && (localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME) || localCurrentTime.equals(MUSEUM_LAST_ENTRY_TIME))) {
+                    Ticket nextVisitor = ticketPool.remove(0);
+                    museum.addVisitor(localCurrentTime, nextVisitor);
+                    scheduledTicketLeaving(nextVisitor);
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-
-            currentTimeCal.add(MINUTE, 1);
-        }
-
-    }
-
-    private void leaveMuseum(Calendar currentTimeCal, Ticket visitor) {
-        DeleteVisitor deleteVisitor = new DeleteVisitor(museum, visitor, currentTimeCal);
-        Thread t = new Thread(deleteVisitor);
-
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
-    private void scheduleLeaveEvent(Ticket visitor) {
-        String leaveTime = CalendarUtils.toHHmmString(visitor.getLeaveTime());
-        if (!leaveScheduledEventMap.containsKey(leaveTime)) {
-            leaveScheduledEventMap.put(leaveTime, new ArrayList<>());
+    private void scheduledTicketLeaving(Ticket ticket) {
+        String leaveTimeKey = CalendarUtils.toHHmmString(ticket.getLeaveTime());
+        if (!ticketLeavingTimeMap.containsKey(leaveTimeKey)) {
+            ticketLeavingTimeMap.put(leaveTimeKey, new ArrayList<>());
         }
-        leaveScheduledEventMap.get(leaveTime).add(visitor);
+        ticketLeavingTimeMap.get(leaveTimeKey).add(ticket);
     }
 
-    private void enterMuseum(Calendar timestamp, Ticket visitor) {
-        AddVisitor addVisitorRunnable = new AddVisitor(museum, visitor, timestamp);
-        Thread t = new Thread(addVisitorRunnable);
+    private class ExitMuseum implements Runnable {
+        @Override
+        public void run() {
 
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            Calendar localCurrentTime = currentTime;
+            Calendar localEndTime = MUSEUM_END_TIME;
+
+            while (!localCurrentTime.after(localEndTime) || !museum.getVisitorList().isEmpty()) {
+                if (!localCurrentTime.equals(currentTime)) {
+                    System.out.println("Current time has changed.");
+                    localCurrentTime = currentTime;
+                }
+
+                if (!localCurrentTime.after(localEndTime)) {
+                    String localCurrentTimeString = CalendarUtils.toHHmmString(localCurrentTime);
+                    if (!museum.getVisitorList().isEmpty() && ticketLeavingTimeMap.containsKey(localCurrentTimeString)) {
+                        List<Ticket> list = ticketLeavingTimeMap.get(localCurrentTimeString);
+                        for (Ticket t : list) {
+                            museum.removeVisitor(localCurrentTime, t);
+                        }
+                    }
+                } else {
+                    for (Map.Entry<String, List<Ticket>> entry : ticketLeavingTimeMap.entrySet()) {
+                        List<Ticket> list = entry.getValue();
+                        for (Ticket t : list) {
+                            museum.removeVisitor(localCurrentTime, t);
+                        }
+                    }
+
+                }
+
+
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    public boolean sellTicket(Calendar sellTicketTime) {
-        SellTicket sellTicketRunnable = new SellTicket(counter, RandomizeUtils.randomizeNumberOfTicketSold(), sellTicketTime);
-        Thread sellTicketThread = new Thread(sellTicketRunnable);
-        sellTicketThread.start();
-        try {
-            sellTicketThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (sellTicketRunnable.getTicketList() != null && !sellTicketRunnable.getTicketList().isEmpty()) {
-            ticketPool.addAll(sellTicketRunnable.getTicketList());
-            return true;
-        }
-
-        return false;
-    }
 }

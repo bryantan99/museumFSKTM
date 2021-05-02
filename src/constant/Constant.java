@@ -28,4 +28,5 @@ public final class Constant {
     public static final String MUSEUM_END_TIME = "18:00";
     public static final String TICKET_COUNTER_END_TIME = "17:00";
     public static final String TICKET_COUNTER_START_TIME = "08:00";
+    public static final String MUSEUM_LAST_ENTRY_TIME = "17:10";
 }

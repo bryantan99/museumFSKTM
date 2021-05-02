@@ -52,7 +52,7 @@ public class Museum {
         this.isOpen = false;
     }
 
-    public synchronized void addVisitor(Calendar timestamp , Ticket ticket) {
+    public synchronized void addVisitor(Calendar timestamp, Ticket ticket) {
         try {
             while (visitorList.size() >= Constant.MAX_VISITOR_IN_MUSEUM) {
                 System.out.println(Thread.currentThread() + " is waiting...");
@@ -62,9 +62,10 @@ public class Museum {
             e.printStackTrace();
         }
 
-        visitorList.add(ticket);
         ticket.updateLeaveTime(timestamp);
-        System.out.println(CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered the museum.");
+        visitorList.add(ticket);
+        String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered museum.";
+        System.out.printf("%-40s [No. of people in the museum : %-3d]\n", enterMsg,visitorList.size());
     }
 
     public synchronized void removeVisitor(Calendar timestamp, Ticket ticket) {
@@ -73,7 +74,8 @@ public class Museum {
         }
 
         visitorList.remove(ticket);
-        System.out.println(CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has left the museum.");
+        String leaveMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has left museum.";
+        System.out.printf("%-40s [No. of people in the museum : %-3d]\n", leaveMsg,visitorList.size());
         notifyAll();
     }
 
@@ -83,5 +85,9 @@ public class Museum {
 
     public void setTurnstileMap(Map<String, List<Turnstile>> turnstileMap) {
         this.turnstileMap = turnstileMap;
+    }
+
+    public void offEntranceTurnstile(Calendar localCurrentTime) {
+        System.out.println(CalendarUtils.toHHmmString(localCurrentTime) + " - Museum's last entry time has reached. Entrance turnstiles has been shut down.");
     }
 }
