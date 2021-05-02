@@ -4,25 +4,29 @@ import constant.Constant;
 import museum.Museum;
 import museum.Ticket;
 import museum.TicketCounter;
+import runnable.AddVisitor;
+import runnable.DeleteVisitor;
 import runnable.SellTicket;
 import utilities.CalendarUtils;
 import utilities.RandomizeUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static java.util.Calendar.MINUTE;
 
 public class Simulator {
     private Museum museum;
     private TicketCounter counter;
+    private List<Ticket> ticketPool;
+    private Map<String, List<Ticket>> leaveScheduledEventMap;
 
     public Simulator() {
         this.museum = new Museum();
         this.counter = new TicketCounter();
+        this.ticketPool = new ArrayList<>();
+        this.leaveScheduledEventMap = new HashMap<>();
     }
 
     public void startSimulate() throws ParseException {
@@ -41,15 +45,28 @@ public class Simulator {
         nextSellTicketDateTime.setTime(startTimeDate);
 
         while (!currentTimeCal.after(endTimeCal)) {
+
             if (currentTimeCal.equals(CalendarUtils.parseTimeInHHmm(Constant.TICKET_COUNTER_END_TIME))) {
-                counter.stopOperate();
+                counter.stopOperate(currentTimeCal);
             }
 
-            if (nextSellTicketDateTime.equals(currentTimeCal)) {
-                List<Ticket> ticketSoldList = sellTicket();
-                if (ticketSoldList != null && !ticketSoldList.isEmpty()) {
-                    printSellTicketMsg(CalendarUtils.toHHmmString(currentTimeCal), ticketSoldList);
+            if (nextSellTicketDateTime.equals(currentTimeCal) && counter.isOperating()) {
+                boolean hasTicketSold = sellTicket(currentTimeCal);
+                if (hasTicketSold) {
                     nextSellTicketDateTime.add(MINUTE, RandomizeUtils.randomizeGapBetweenTicketPurchases());
+                }
+            }
+
+            if(!ticketPool.isEmpty()) {
+                Ticket visitor = ticketPool.remove(0);
+                enterMuseum(currentTimeCal, visitor);
+                scheduleLeaveEvent(visitor);
+            }
+
+            if (leaveScheduledEventMap.containsKey(CalendarUtils.toHHmmString(currentTimeCal))) {
+                List<Ticket> leavingVisitorList = leaveScheduledEventMap.get(CalendarUtils.toHHmmString(currentTimeCal));
+                for (Ticket visitor : leavingVisitorList) {
+                    leaveMuseum(currentTimeCal, visitor);
                 }
             }
 
@@ -58,21 +75,40 @@ public class Simulator {
 
     }
 
-    private void printSellTicketMsg(String timestamp, List<Ticket> ticketSoldList) {
-        String msg = timestamp + " - Tickets ";
-        for (int i = 0; i < ticketSoldList.size() ; i++) {
-            Ticket t = ticketSoldList.get(i);
-            msg += t.getTicketId();
-            if (i != ticketSoldList.size() - 1) {
-                msg += ", ";
-            }
+    private void leaveMuseum(Calendar currentTimeCal, Ticket visitor) {
+        DeleteVisitor deleteVisitor = new DeleteVisitor(museum, visitor, currentTimeCal);
+        Thread t = new Thread(deleteVisitor);
+
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        msg += " sold.";
-        System.out.println(msg);
     }
 
-    public List<Ticket> sellTicket() {
-        SellTicket sellTicketRunnable = new SellTicket(counter, RandomizeUtils.randomizeNumberOfTicketSold());
+    private void scheduleLeaveEvent(Ticket visitor) {
+        String leaveTime = CalendarUtils.toHHmmString(visitor.getLeaveTime());
+        if (!leaveScheduledEventMap.containsKey(leaveTime)) {
+            leaveScheduledEventMap.put(leaveTime, new ArrayList<>());
+        }
+        leaveScheduledEventMap.get(leaveTime).add(visitor);
+    }
+
+    private void enterMuseum(Calendar timestamp, Ticket visitor) {
+        AddVisitor addVisitorRunnable = new AddVisitor(museum, visitor, timestamp);
+        Thread t = new Thread(addVisitorRunnable);
+
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean sellTicket(Calendar sellTicketTime) {
+        SellTicket sellTicketRunnable = new SellTicket(counter, RandomizeUtils.randomizeNumberOfTicketSold(), sellTicketTime);
         Thread sellTicketThread = new Thread(sellTicketRunnable);
         sellTicketThread.start();
         try {
@@ -80,6 +116,12 @@ public class Simulator {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return sellTicketRunnable.getTicketList();
+
+        if (sellTicketRunnable.getTicketList() != null && !sellTicketRunnable.getTicketList().isEmpty()) {
+            ticketPool.addAll(sellTicketRunnable.getTicketList());
+            return true;
+        }
+
+        return false;
     }
 }

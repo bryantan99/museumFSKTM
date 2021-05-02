@@ -1,8 +1,10 @@
 package museum;
 
 import constant.Constant;
+import utilities.CalendarUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,12 +26,12 @@ public class TicketCounter {
         this.isOperating = true;
     }
 
-    public void stopOperate() {
+    public void stopOperate(Calendar closingTime) {
         this.isOperating = false;
-        System.out.println("Ticket counter is now closing...\nNumber of ticket(s) sold    : " + numberOfTicketSold);
+        System.out.println(CalendarUtils.toHHmmString(closingTime) + " - Ticket counter is now closing...\nNumber of ticket(s) sold    : " + numberOfTicketSold);
     }
 
-    public synchronized List<Ticket> sellTicket(int ticketAmount) {
+    public synchronized List<Ticket> sellTicket(Calendar sellTime, int ticketAmount) {
         if (!isOperating()) {
             System.out.println("Ticket counter is closed.");
             return Collections.emptyList();
@@ -37,7 +39,7 @@ public class TicketCounter {
 
         if (numberOfTicketSold >= Constant.MAX_VISITOR_PER_DAY) {
             System.out.println(numberOfTicketSold + " tickets has already been sold out.");
-            stopOperate();
+            stopOperate(sellTime);
             return Collections.emptyList();
         }
 

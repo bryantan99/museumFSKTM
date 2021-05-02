@@ -1,33 +1,30 @@
 package runnable;
 
-import constant.Constant;
 import museum.Museum;
 import museum.Ticket;
+
+import java.util.Calendar;
 
 public class AddVisitor implements Runnable {
 
     private final Museum museum;
     private final Ticket ticket;
+    private Calendar enterTimestamp;
 
-    public AddVisitor(Museum museum, Ticket ticket) {
+    public AddVisitor(Museum museum, Ticket ticket, Calendar enterTimestamp) {
         this.museum = museum;
         this.ticket = ticket;
+        this.enterTimestamp = enterTimestamp;
     }
 
     @Override
     public void run() {
-        Thread incomingVisitorThread = Thread.currentThread();
+        museum.addVisitor(enterTimestamp, ticket);
         try {
-            if (museum.getNumberOfCurrentVisitor() >= Constant.MAX_VISITOR_IN_MUSEUM) {
-                incomingVisitorThread.wait();
-            }
+            Thread.sleep(20);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        int newTotal = museum.getNumberOfCurrentVisitor() + 1;
-        museum.setNumberOfCurrentVisitor(newTotal);
-        System.out.println("Visitor with ticketId (" + ticket.getTicketId() + ") has entered the museum. Current total number of visitors in the museum : " + museum.getNumberOfCurrentVisitor());
     }
 
 }

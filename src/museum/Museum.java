@@ -2,20 +2,18 @@ package museum;
 
 import turnstile.*;
 import constant.Constant;
+import utilities.CalendarUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Museum {
 
-    private int numberOfCurrentVisitor;
+    private List<Ticket> visitorList;
     private boolean isOpen;
     private Map<String, List<Turnstile>> turnstileMap;
 
     public Museum() {
-        this.numberOfCurrentVisitor = 0;
+        this.visitorList = new ArrayList<>();
         this.isOpen = false;
         initTurnstileMap();
     }
@@ -42,11 +40,9 @@ public class Museum {
         isOpen = open;
     }
 
-    public int getNumberOfCurrentVisitor() {
-        return numberOfCurrentVisitor;
+    public List<Ticket> getVisitorList() {
+        return visitorList;
     }
-
-    public void setNumberOfCurrentVisitor(int numberOfCurrentVisitor) { this.numberOfCurrentVisitor = numberOfCurrentVisitor; }
 
     public void startBusiness() {
         this.isOpen = true;
@@ -56,12 +52,29 @@ public class Museum {
         this.isOpen = false;
     }
 
-    public void addVisitor() {
-        numberOfCurrentVisitor++;
+    public synchronized void addVisitor(Calendar timestamp , Ticket ticket) {
+        try {
+            while (visitorList.size() >= Constant.MAX_VISITOR_IN_MUSEUM) {
+                System.out.println(Thread.currentThread() + " is waiting...");
+                wait(1000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        visitorList.add(ticket);
+        ticket.updateLeaveTime(timestamp);
+        System.out.println(CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered the museum.");
     }
 
-    public void removeVisitor() {
-        numberOfCurrentVisitor--;
+    public synchronized void removeVisitor(Calendar timestamp, Ticket ticket) {
+        if (!visitorList.contains(ticket)) {
+            return;
+        }
+
+        visitorList.remove(ticket);
+        System.out.println(CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has left the museum.");
+        notifyAll();
     }
 
     public Map<String, List<Turnstile>> getTurnstileMap() {

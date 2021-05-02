@@ -17,12 +17,12 @@ public class EntranceTurnstile extends Turnstile {
             return;
         }
 
-        if (museum.getNumberOfCurrentVisitor() < Constant.MAX_VISITOR_IN_MUSEUM) {
-            System.out.println("Museum is full. Current capacity : " + museum.getNumberOfCurrentVisitor() + " / " + Constant.MAX_VISITOR_IN_MUSEUM);
+        if (museum.getVisitorList().size() < Constant.MAX_VISITOR_IN_MUSEUM) {
+            System.out.println("Museum is full. Current capacity : " + museum.getVisitorList().size() + " / " + Constant.MAX_VISITOR_IN_MUSEUM);
             return;
         }
         
-        museum.addVisitor();
+//        museum.addVisitor();
     }
 
 }

@@ -11,7 +11,7 @@ public class ExitTurnstile extends Turnstile {
     }
 
     public void removeVisitor() {
-        museum.removeVisitor();
+//        museum.removeVisitor();
     }
 
 }
