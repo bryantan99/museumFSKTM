@@ -1,12 +1,16 @@
 package museum;
 
-import Simulator.Simulator;
-import turnstile.*;
 import constant.Constant;
+import turnstile.EntranceTurnstile;
+import turnstile.ExitTurnstile;
+import turnstile.Turnstile;
 import utilities.CalendarUtils;
 import utilities.EntanceUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class Museum {
 
@@ -76,7 +80,7 @@ public class Museum {
 
         ticket.updateLeaveTime(timestamp);
         visitorList.add(ticket);
-        String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered museum.";
+        String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered museum. Leave time : " + CalendarUtils.toHHmmString(ticket.getLeaveTime());
         System.out.printf("%-60s [No. of people in the museum : %-3d] [Leaving time: %-5s] [Staying time: %-3s minutes]\n", enterMsg, getTotalNumOfPeopleInMuseum(), CalendarUtils.toHHmmString(ticket.getLeaveTime()), ticket.getStayTimeInMinute());
     }
 

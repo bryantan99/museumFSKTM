@@ -1,6 +1,5 @@
 package Simulator;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import constant.Constant;
 import museum.Museum;
 import museum.Ticket;
@@ -177,6 +176,7 @@ public class Simulator {
 
             Calendar localCurrentTime = currentTime;
             Calendar localEndTime = MUSEUM_END_TIME;
+            Map<String, List<Ticket>> localTicketLeavingTimeMap = ticketLeavingTimeMap;
 
             while (!localCurrentTime.after(localEndTime) || !museum.getVisitorList().isEmpty()) {
                 if(localCurrentTime.after(localEndTime) && !museum.getVisitorList().isEmpty()){
@@ -186,6 +186,11 @@ public class Simulator {
                 if (!localCurrentTime.equals(currentTime)) {
                     System.out.println("Current time has changed.");
                     localCurrentTime = currentTime;
+                }
+
+                if (!localTicketLeavingTimeMap.equals(ticketLeavingTimeMap)) {
+                    System.out.println("Map has updated");
+                    localTicketLeavingTimeMap = ticketLeavingTimeMap;
                 }
 
                 if (!localCurrentTime.after(localEndTime)) {
