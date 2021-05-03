@@ -1,5 +1,6 @@
 package turnstile;
 
+import constant.Constant;
 import museum.Ticket;
 
 import java.util.LinkedList;
@@ -8,14 +9,16 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public abstract class Turnstile {
-    private String turnstileId;
-    private ReentrantReadWriteLock readWriteLock;
-    private Lock readLock;
-    private Lock writeLock;
-    private Queue<Ticket> queue;
+    protected String turnstileId;
+    protected ReentrantReadWriteLock readWriteLock;
+    protected int maxCapaticy;
+    protected Lock readLock;
+    protected Lock writeLock;
+    protected volatile Queue<Ticket> queue;
 
     public Turnstile(String turnstileId) {
         this.turnstileId = turnstileId;
+        this.maxCapaticy = Constant.TURNSTILE_NUM;
         this.readWriteLock = new ReentrantReadWriteLock();
         this.readLock = this.readWriteLock.readLock();
         this.writeLock = this.readWriteLock.writeLock();

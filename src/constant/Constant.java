@@ -29,4 +29,17 @@ public final class Constant {
     public static final String TICKET_COUNTER_END_TIME = "17:00";
     public static final String TICKET_COUNTER_START_TIME = "08:00";
     public static final String MUSEUM_LAST_ENTRY_TIME = "17:10";
+
+
+    // ThreadPool
+    public static final int THREAD_NUM = 6;
+
+    // Turnstile Num
+    public static final int TURNSTILE_NUM = 4;
+
+    // Thread Time
+    public static final int SLEEP_TIME = 150;
+
+    // Turnstile Thread Time
+    public static final int TURNSTILE_SLEEP_TIME = 150;
 }

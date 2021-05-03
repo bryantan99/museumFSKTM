@@ -27,6 +27,10 @@ public class Ticket {
         return leaveTime;
     }
 
+    public int getStayTimeInMinute() {
+        return stayTimeInMinute;
+    }
+
     public void updateLeaveTime(Calendar enterTime) {
         leaveTime = Calendar.getInstance();
         leaveTime.setTime(enterTime.getTime());
