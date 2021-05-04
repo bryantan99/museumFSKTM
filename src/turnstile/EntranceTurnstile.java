@@ -49,7 +49,7 @@ public class EntranceTurnstile extends Turnstile {
             tempQueue = this.queue;
         }
 
-        String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " tries to enter using "  + "Turnstile " + turnstileId + tempQueue.size();
+        String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " tries to enter using Turnstile " + turnstileId + tempQueue.size() + ".";
         System.out.printf("%-60s [No. of people in the  " + turnstileId + " turnstile : %-3d]\n", enterMsg, tempQueue.size());
     }
 

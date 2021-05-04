@@ -36,9 +36,8 @@ public class ExitTurnstile extends Turnstile {
                 return;
             }
 
-
             int size = this.queue.size();
-            String leaveMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has left using " + "Turnstile " + turnstileId + size;
+            String leaveMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has left using Turnstile " + turnstileId + size + ". ";
             System.out.printf("%-60s [No. of people in the " + turnstileId + " turnstile : %-3d] [No. of people in the museum : %-3d]\n", leaveMsg, size, museum.getTotalNumOfPeopleInMuseum());
         } catch (InterruptedException e) {
             e.printStackTrace();
