@@ -9,28 +9,26 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public abstract class Turnstile {
-    protected String turnstileId;
+    protected String turnstileType;
     protected ReentrantReadWriteLock readWriteLock;
-    protected int maxCapaticy;
     protected Lock readLock;
     protected Lock writeLock;
     protected volatile Queue<Ticket> queue;
 
-    public Turnstile(String turnstileId) {
-        this.turnstileId = turnstileId;
-        this.maxCapaticy = Constant.TURNSTILE_NUM;
+    public Turnstile(String turnstileType) {
+        this.turnstileType = turnstileType;
         this.readWriteLock = new ReentrantReadWriteLock();
         this.readLock = this.readWriteLock.readLock();
         this.writeLock = this.readWriteLock.writeLock();
         this.queue = new LinkedList<>();
     }
 
-    public String getTurnstileId() {
-        return turnstileId;
+    public String getTurnstileType() {
+        return turnstileType;
     }
 
-    public void setTurnstileId(String turnstileId) {
-        this.turnstileId = turnstileId;
+    public void setTurnstileType(String turnstileType) {
+        this.turnstileType = turnstileType;
     }
 
     public ReentrantReadWriteLock getReadWriteLock() {

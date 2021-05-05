@@ -6,7 +6,7 @@ import museum.Ticket;
 import museum.TicketCounter;
 import utilities.CalendarUtils;
 import utilities.RandomizeUtils;
-import utilities.EntanceUtils;
+import utilities.EntranceExitUtils;
 
 import java.text.ParseException;
 import java.util.*;
@@ -138,7 +138,7 @@ public class Simulator {
                     Ticket nextVisitor = null;
 
                     if(!museum.getSEEntranceTurnstile().getQueue().isEmpty() && !museum.getNEEntranceTurnstile().getQueue().isEmpty()){
-                        if (EntanceUtils.judgeWhichEntranceToGo()) {
+                        if (EntranceExitUtils.toSouthEntrance()) {
                             nextVisitor = museum.getSEEntranceTurnstile().getQueue().remove();
                         } else {
                             nextVisitor = museum.getNEEntranceTurnstile().getQueue().remove();
@@ -228,7 +228,7 @@ public class Simulator {
                 if (museum.isOpen() && !turnStilePool.isEmpty() && (museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM || museum.getSEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM) && (localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME) || localCurrentTime.equals(MUSEUM_LAST_ENTRY_TIME))) {
                     Ticket nextVisitor = turnStilePool.remove(0);
                     if(museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM && museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM){
-                        if (EntanceUtils.judgeWhichEntranceToGo()) {
+                        if (EntranceExitUtils.toSouthEntrance()) {
                             museum.getSEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
                         } else {
                             museum.getNEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
@@ -258,7 +258,7 @@ public class Simulator {
 
             while (!localCurrentTime.after(localEndTime) || !museum.getEEExitTurnstile().getQueue().isEmpty() || !museum.getWEExitTurnstile().getQueue().isEmpty() || !museum.getVisitorList().isEmpty()) {
                 if(!museum.getEEExitTurnstile().getQueue().isEmpty() && !museum.getWEExitTurnstile().getQueue().isEmpty()){
-                    if (EntanceUtils.judgeWhichEntranceToGo()) {
+                    if (EntranceExitUtils.toSouthEntrance()) {
                         museum.getEEExitTurnstile().addExitVisitor(localCurrentTime);
                     } else {
                         museum.getWEExitTurnstile().addExitVisitor(localCurrentTime);

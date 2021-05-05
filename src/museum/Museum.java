@@ -5,12 +5,9 @@ import turnstile.EntranceTurnstile;
 import turnstile.ExitTurnstile;
 import turnstile.Turnstile;
 import utilities.CalendarUtils;
-import utilities.EntanceUtils;
+import utilities.EntranceExitUtils;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Museum {
 
@@ -100,7 +97,7 @@ public class Museum {
         this.visitorList.remove(ticket);
         decideExitTurnstile(ticket);
         String leaveMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " wants to leave the museum.";
-        System.out.printf("%-60s [No. of people in the museum : %-3d]\n", leaveMsg, getTotalNumOfPeopleInMuseum());
+        System.out.printf("%-60s\n", leaveMsg, getTotalNumOfPeopleInMuseum());
         notifyAll();
     }
 
@@ -110,19 +107,9 @@ public class Museum {
         return numOfPeopleAtTurnStile + numOfPeopleAtMainMeseum;
     }
 
-    public void decideExitTurnstile(Ticket ticket){
-        // judge which exit should go
-        if(this.EEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM && this.WEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM){
-            if (EntanceUtils.judgeWhichEntranceToGo()) {
-                this.EEExitTurnstile.getQueue().add(ticket);
-            } else {
-                this.WEExitTurnstile.getQueue().add(ticket);
-            }
-        }else if(this.EEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM){
-            this.EEExitTurnstile.getQueue().add(ticket);
-        }else if(this.WEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM){
-            this.WEExitTurnstile.getQueue().add(ticket);
-        }
+    public void decideExitTurnstile(Ticket ticket) {
+        Queue<Ticket> queueList = EntranceExitUtils.toWestExit() ? WEExitTurnstile.getQueue() : EEExitTurnstile.getQueue();
+        queueList.add(ticket);
     }
 
     public Map<String, List<Turnstile>> getTurnstileMap() {
