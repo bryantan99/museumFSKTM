@@ -1,4 +1,4 @@
-package Simulator;
+package simulator;
 
 import constant.Constant;
 import museum.Museum;

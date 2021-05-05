@@ -1,6 +1,6 @@
 package museumduringpandemic;
 
-import Simulator.Simulator;
+import simulator.Simulator;
 
 import java.text.ParseException;
 
