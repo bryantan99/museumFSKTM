@@ -11,9 +11,6 @@ public class Ticket {
     private int stayTimeInMinute;
     private Calendar leaveTime;
 
-    public Ticket() {
-    }
-
     public Ticket(int id) {
         this.ticketId = Constant.TICKET_ID_TEMPLATE + String.format("%04d", id);
         this.stayTimeInMinute = RandomizeUtils.randomizeStayTimeInMuseum();
