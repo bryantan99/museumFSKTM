@@ -5,6 +5,7 @@ import constant.Constant;
 import java.util.Random;
 
 public final class RandomizeUtils {
+    public static Random r = new Random();
 
     static Random r = new Random();
 
