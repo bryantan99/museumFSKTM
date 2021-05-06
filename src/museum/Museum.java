@@ -76,7 +76,7 @@ public class Museum {
         ticket.updateLeaveTime(timestamp);
         visitorList.add(ticket);
         String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered museum.";
-        System.out.printf("%-60s [No. of people in the museum : %-3d] [Leaving time: %-5s] [Staying time: %-3s minutes]\n", enterMsg, getTotalNumOfPeopleInMuseum(), CalendarUtils.toHHmmString(ticket.getLeaveTime()), ticket.getStayTimeInMinute());
+        System.out.printf("%-60s[No. of people in the museum : %-3d] [Leaving time: %-5s] [Staying time: %-3s minutes]\n", enterMsg, getTotalNumOfPeopleInMuseum(), CalendarUtils.toHHmmString(ticket.getLeaveTime()), ticket.getStayTimeInMinute());
     }
 
     private boolean ifAddVisitorToMuseum() {
@@ -98,7 +98,7 @@ public class Museum {
         this.visitorList.remove(ticket);
         decideExitTurnstile(ticket);
         String leaveMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " wants to leave the museum.";
-        System.out.printf("%-60s [No. of people in the museum : %-3d]\n", leaveMsg, getTotalNumOfPeopleInMuseum());
+        System.out.printf("%-60s\n", leaveMsg);
         notifyAll();
     }
 
