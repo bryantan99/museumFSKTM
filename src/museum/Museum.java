@@ -5,7 +5,7 @@ import turnstile.EntranceTurnstile;
 import turnstile.ExitTurnstile;
 import turnstile.Turnstile;
 import utilities.CalendarUtils;
-import utilities.EntanceUtils;
+import utilities.EntranceUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,10 +52,6 @@ public class Museum {
         return isOpen;
     }
 
-    public void setOpen(boolean open) {
-        isOpen = open;
-    }
-
     public List<Ticket> getVisitorList() {
         return visitorList;
     }
@@ -70,9 +66,8 @@ public class Museum {
 
     public synchronized void addVisitor(Calendar timestamp, Ticket ticket) {
         try {
-            while (visitorList.size() >= Constant.MAX_VISITOR_IN_MUSEUM || (SEEntranceTurnstile.getQueue().size() == 0 && NEEntranceTurnstile.getQueue().size() == 0)) {
-//                System.out.println(Thread.currentThread() + " is waiting... --Museum");
-                wait(100);
+            while (ifAddVisitorToMuseum()) {
+                wait(Constant.MUSEUM_WAIT_TIME);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -84,14 +79,17 @@ public class Museum {
         System.out.printf("%-60s [No. of people in the museum : %-3d] [Leaving time: %-5s] [Staying time: %-3s minutes]\n", enterMsg, getTotalNumOfPeopleInMuseum(), CalendarUtils.toHHmmString(ticket.getLeaveTime()), ticket.getStayTimeInMinute());
     }
 
+    private boolean ifAddVisitorToMuseum() {
+        return visitorList.size() >= Constant.MAX_VISITOR_IN_MUSEUM || (SEEntranceTurnstile.getQueue().size() == 0 && NEEntranceTurnstile.getQueue().size() == 0);
+    }
+
     public synchronized void removeVisitor(Calendar timestamp, Ticket ticket) {
         if (!visitorList.contains(ticket)) {
             return;
         }
         try{
             while (this.EEExitTurnstile.getQueue().size() >= Constant.TURNSTILE_NUM && this.WEExitTurnstile.getQueue().size() >= Constant.TURNSTILE_NUM) {
-//                System.out.println(Thread.currentThread() + " is waiting... --Museum");
-                wait(100);
+                wait(Constant.MUSEUM_WAIT_TIME);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -112,8 +110,8 @@ public class Museum {
 
     public void decideExitTurnstile(Ticket ticket){
         // judge which exit should go
-        if(this.EEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM && this.WEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM){
-            if (EntanceUtils.judgeWhichEntranceToGo()) {
+        if(judgePeopleNumOfExit()){
+            if (EntranceUtils.toSouthEntrance()) {
                 this.EEExitTurnstile.getQueue().add(ticket);
             } else {
                 this.WEExitTurnstile.getQueue().add(ticket);
@@ -125,12 +123,8 @@ public class Museum {
         }
     }
 
-    public Map<String, List<Turnstile>> getTurnstileMap() {
-        return turnstileMap;
-    }
-
-    public void setTurnstileMap(Map<String, List<Turnstile>> turnstileMap) {
-        this.turnstileMap = turnstileMap;
+    private boolean judgePeopleNumOfExit() {
+        return this.EEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM && this.WEExitTurnstile.getQueue().size() < Constant.TURNSTILE_NUM;
     }
 
     public void offEntranceTurnstile(Calendar localCurrentTime) {

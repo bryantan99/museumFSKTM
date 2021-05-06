@@ -5,8 +5,6 @@ import java.util.List;
 
 public final class Constant {
 
-    public static final int MAX_NUMBER_OF_TICKET = 9999;
-
     // Maximum number of visitors / tickets to be sold per day.
     public static final int MAX_VISITOR_PER_DAY = 900;
 
@@ -21,8 +19,6 @@ public final class Constant {
     public static final String NORTH_ENTRANCE = "NE";
     public static final String EAST_EXIT = "EE";
     public static final String WEST_EXIT = "WE";
-    public static final List<String> ENTRANCE_TURNSTILE_LIST = Arrays.asList(SOUTH_ENTRANCE, NORTH_ENTRANCE);
-    public static final List<String> EXIT_TURNSTILE_LIST = Arrays.asList(EAST_EXIT, WEST_EXIT);
 
     public static final String MUSEUM_START_TIME = "09:00";
     public static final String MUSEUM_END_TIME = "18:00";
@@ -42,4 +38,13 @@ public final class Constant {
 
     // Turnstile Thread Time
     public static final int TURNSTILE_SLEEP_TIME = 150;
+
+    // Entrance Wait Time
+    public static final int Entrance_WAIT_TIME = 100;
+
+    // Exit Wait Time
+    public static final int EXIT_WAIT_TIME = 100;
+
+    // Museum Wait Time
+    public static final int MUSEUM_WAIT_TIME = 100;
 }

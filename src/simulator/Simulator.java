@@ -5,8 +5,9 @@ import museum.Museum;
 import museum.Ticket;
 import museum.TicketCounter;
 import utilities.CalendarUtils;
+import utilities.ExitUtils;
 import utilities.RandomizeUtils;
-import utilities.EntanceUtils;
+import utilities.EntranceUtils;
 
 import java.text.ParseException;
 import java.util.*;
@@ -55,7 +56,7 @@ public class Simulator {
         @Override
         public void run() {
             Calendar localCurrentTime = currentTime;
-            while (localCurrentTime.before(MUSEUM_END_TIME) || localCurrentTime.equals(MUSEUM_END_TIME) || !museum.getVisitorList().isEmpty()) {
+            while (incrementCondition(localCurrentTime)) {
                 if (localCurrentTime.equals(TICKET_COUNTER_START_TIME)) {
                     counter.startOperate();
                 } else if (localCurrentTime.equals(TICKET_COUNTER_END_TIME)) {
@@ -78,9 +79,10 @@ public class Simulator {
         }
     }
 
-    public void setCurrentTime(Calendar currentTime) {
-        this.currentTime = currentTime;
+    private boolean incrementCondition(Calendar localCurrentTime) {
+        return localCurrentTime.before(MUSEUM_END_TIME) || localCurrentTime.equals(MUSEUM_END_TIME) || !museum.getVisitorList().isEmpty();
     }
+
 
     private class SellTicket implements Runnable {
         @Override
@@ -134,11 +136,11 @@ public class Simulator {
                     localCurrentTime = currentTime;
                 }
 
-                if (museum.isOpen() && (!museum.getNEEntranceTurnstile().getQueue().isEmpty() || !museum.getSEEntranceTurnstile().getQueue().isEmpty()) && museum.getTotalNumOfPeopleInMuseum() < Constant.MAX_VISITOR_IN_MUSEUM && (localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME) || localCurrentTime.equals(MUSEUM_LAST_ENTRY_TIME))) {
+                if (enterMuseumCondition(localCurrentTime)) {
                     Ticket nextVisitor = null;
 
                     if(!museum.getSEEntranceTurnstile().getQueue().isEmpty() && !museum.getNEEntranceTurnstile().getQueue().isEmpty()){
-                        if (EntanceUtils.judgeWhichEntranceToGo()) {
+                        if (EntranceUtils.toSouthEntrance()) {
                             nextVisitor = museum.getSEEntranceTurnstile().getQueue().remove();
                         } else {
                             nextVisitor = museum.getNEEntranceTurnstile().getQueue().remove();
@@ -160,6 +162,11 @@ public class Simulator {
                 }
             }
         }
+    }
+
+    private boolean enterMuseumCondition(Calendar localCurrentTime) {
+        return museum.isOpen() && (!museum.getNEEntranceTurnstile().getQueue().isEmpty() || !museum.getSEEntranceTurnstile().getQueue().isEmpty())
+                && museum.getTotalNumOfPeopleInMuseum() < Constant.MAX_VISITOR_IN_MUSEUM && localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME);
     }
 
     private void scheduledTicketLeaving(Ticket ticket) {
@@ -225,18 +232,18 @@ public class Simulator {
                     localCurrentTime = currentTime;
                 }
 
-                if (museum.isOpen() && !turnStilePool.isEmpty() && (museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM || museum.getSEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM) && (localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME) || localCurrentTime.equals(MUSEUM_LAST_ENTRY_TIME))) {
+                if (enturnTunstileCondition(localCurrentTime)) {
                     Ticket nextVisitor = turnStilePool.remove(0);
                     if(museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM && museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM){
-                        if (EntanceUtils.judgeWhichEntranceToGo()) {
+                        if (EntranceUtils.toSouthEntrance()) {
                             museum.getSEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
                         } else {
                             museum.getNEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
                         }
-                    }else if(museum.getNEEntranceTurnstile().getQueue().size() >= Constant.TURNSTILE_NUM){
-                        museum.getSEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
-                    }else if(museum.getSEEntranceTurnstile().getQueue().size() >= Constant.TURNSTILE_NUM){
+                    }else if(museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM){
                         museum.getNEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
+                    }else if(museum.getSEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM){
+                        museum.getSEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
                     }
 
                 }
@@ -250,15 +257,19 @@ public class Simulator {
         }
     }
 
+    private boolean enturnTunstileCondition(Calendar localCurrentTime) {
+        return museum.isOpen() && !turnStilePool.isEmpty() && (museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM || museum.getSEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM) && localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME);
+    }
+
     private class ExitTurnstile implements Runnable {
         @Override
         public void run() {
             Calendar localCurrentTime = currentTime;
             Calendar localEndTime = MUSEUM_END_TIME;
 
-            while (!localCurrentTime.after(localEndTime) || !museum.getEEExitTurnstile().getQueue().isEmpty() || !museum.getWEExitTurnstile().getQueue().isEmpty() || !museum.getVisitorList().isEmpty()) {
+            while (exitMuseumCondition(localCurrentTime, localEndTime)) {
                 if(!museum.getEEExitTurnstile().getQueue().isEmpty() && !museum.getWEExitTurnstile().getQueue().isEmpty()){
-                    if (EntanceUtils.judgeWhichEntranceToGo()) {
+                    if (ExitUtils.toEastExit()) {
                         museum.getEEExitTurnstile().addExitVisitor(localCurrentTime);
                     } else {
                         museum.getWEExitTurnstile().addExitVisitor(localCurrentTime);
@@ -276,5 +287,9 @@ public class Simulator {
                 }
             }
         }
+    }
+
+    private boolean exitMuseumCondition(Calendar localCurrentTime, Calendar localEndTime) {
+        return !localCurrentTime.after(localEndTime) || !museum.getEEExitTurnstile().getQueue().isEmpty() || !museum.getWEExitTurnstile().getQueue().isEmpty() || !museum.getVisitorList().isEmpty();
     }
 }
