@@ -7,8 +7,6 @@ import java.util.Random;
 public final class RandomizeUtils {
     public static Random r = new Random();
 
-    static Random r = new Random();
-
     public static int randomizeStayTimeInMuseum() {
         return r.nextInt(101) + 50;
     }
