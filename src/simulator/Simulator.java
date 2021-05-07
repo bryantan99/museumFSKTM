@@ -58,13 +58,13 @@ public class Simulator {
             Calendar localCurrentTime = currentTime;
             while (incrementCondition(localCurrentTime)) {
                 if (localCurrentTime.equals(TICKET_COUNTER_START_TIME)) {
-                    counter.startOperate();
+                    counter.startOperate(localCurrentTime);
                 } else if (localCurrentTime.equals(TICKET_COUNTER_END_TIME)) {
                     counter.stopOperate(localCurrentTime);
                 } else if (localCurrentTime.equals(MUSEUM_START_TIME)) {
-                    museum.startBusiness();
+                    museum.startBusiness(localCurrentTime);
                 } else if (localCurrentTime.equals(MUSEUM_END_TIME)) {
-                    museum.endBusiness();
+                    museum.endBusiness(localCurrentTime);
                 } else if (localCurrentTime.equals(MUSEUM_LAST_ENTRY_TIME)) {
                     museum.offEntranceTurnstile(localCurrentTime);
                 }

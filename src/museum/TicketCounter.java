@@ -22,14 +22,16 @@ public class TicketCounter {
         return isOperating;
     }
 
-    public void startOperate() {
+    public void startOperate(Calendar timestamp) {
         this.isOperating = true;
+        String openMsg = CalendarUtils.toHHmmString(timestamp) + " - Ticket counter is now opened.";
+        System.out.printf("%-60s\n", openMsg);
     }
 
     public void stopOperate(Calendar closingTime) {
         this.isOperating = false;
         String closeMsg = CalendarUtils.toHHmmString(closingTime) + " - Ticket counter is closed.";
-        System.out.printf("%-40s [No. of tickets sold : %-3d]\n", closeMsg, numberOfTicketSold);
+        System.out.printf("%-60s[No. of tickets sold : %-3d]\n", closeMsg, numberOfTicketSold);
     }
 
     public synchronized List<Ticket> sellTicket(Calendar sellTime, int ticketAmount) {

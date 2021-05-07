@@ -56,12 +56,16 @@ public class Museum {
         return visitorList;
     }
 
-    public void startBusiness() {
+    public void startBusiness(Calendar timestamp) {
         this.isOpen = true;
+        String openMsg = CalendarUtils.toHHmmString(timestamp) + " - Museum is now opened.";
+        System.out.printf("%-60s\n", openMsg);
     }
 
-    public void endBusiness() {
+    public void endBusiness(Calendar timestamp) {
         this.isOpen = false;
+        String closeMsg = CalendarUtils.toHHmmString(timestamp) + " - Museum is closing now.";
+        System.out.printf("%-60s\n", closeMsg);
     }
 
     public synchronized void addVisitor(Calendar timestamp, Ticket ticket) {
