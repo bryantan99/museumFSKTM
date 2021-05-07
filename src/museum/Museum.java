@@ -84,7 +84,8 @@ public class Museum {
     }
 
     private boolean ifAddVisitorToMuseum() {
-        return visitorList.size() >= Constant.MAX_VISITOR_IN_MUSEUM || (SEEntranceTurnstile.getQueue().size() == 0 && NEEntranceTurnstile.getQueue().size() == 0);
+        return visitorList.size() >= Constant.MAX_VISITOR_IN_MUSEUM ||
+                (SEEntranceTurnstile.getQueue().size() == 0 && NEEntranceTurnstile.getQueue().size() == 0);
     }
 
     public synchronized void removeVisitor(Calendar timestamp, Ticket ticket) {
@@ -92,7 +93,8 @@ public class Museum {
             return;
         }
         try{
-            while (this.EEExitTurnstile.getQueue().size() >= Constant.TURNSTILE_NUM && this.WEExitTurnstile.getQueue().size() >= Constant.TURNSTILE_NUM) {
+            while (this.EEExitTurnstile.getQueue().size() >= Constant.TURNSTILE_NUM
+                    && this.WEExitTurnstile.getQueue().size() >= Constant.TURNSTILE_NUM) {
                 wait(Constant.MUSEUM_WAIT_TIME);
             }
         } catch (InterruptedException e) {
