@@ -115,7 +115,6 @@ public class Simulator {
                     e.printStackTrace();
                 }
             }
-            counter.stopOperate(localCurrentTime);
         }
     }
 
