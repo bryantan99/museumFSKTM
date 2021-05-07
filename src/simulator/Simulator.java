@@ -90,7 +90,7 @@ public class Simulator {
             Calendar localCurrentTime = currentTime;
             Calendar localNextSellTicketTime = nextTicketSellTime;
 
-            while (counter.isOperating()) {
+            while (localCurrentTime.before(TICKET_COUNTER_END_TIME)) {
                 if (!localCurrentTime.equals(currentTime)) {
                     System.out.println("Current time has changed");
                     localCurrentTime = currentTime;
@@ -101,12 +101,7 @@ public class Simulator {
                     localNextSellTicketTime = nextTicketSellTime;
                 }
 
-                if (localCurrentTime.equals(TICKET_COUNTER_END_TIME) || localCurrentTime.after(TICKET_COUNTER_END_TIME)) {
-                    counter.stopOperate(localCurrentTime);
-                    continue;
-                }
-
-                if (localCurrentTime.equals(nextTicketSellTime) || localCurrentTime.after(nextTicketSellTime)) {
+                if (localCurrentTime.equals(nextTicketSellTime) || localCurrentTime.after(nextTicketSellTime) && counter.isOperating()) {
                     List<Ticket> purchasedTicketList = counter.sellTicket(localCurrentTime, RandomizeUtils.randomizeNumberOfTicketSold());
                     if (purchasedTicketList != null && !purchasedTicketList.isEmpty()) {
                         turnStilePool.addAll(purchasedTicketList);
@@ -120,7 +115,7 @@ public class Simulator {
                     e.printStackTrace();
                 }
             }
-
+            counter.stopOperate(localCurrentTime);
         }
     }
 
@@ -151,8 +146,10 @@ public class Simulator {
                         nextVisitor = museum.getSEEntranceTurnstile().getQueue().remove();
                     }
 
-                    museum.addVisitor(localCurrentTime, nextVisitor);
-                    scheduledTicketLeaving(nextVisitor);
+                    if (nextVisitor != null) {
+                        museum.addVisitor(localCurrentTime, nextVisitor);
+                        scheduledTicketLeaving(nextVisitor);
+                    }
                 }
 
                 try {
