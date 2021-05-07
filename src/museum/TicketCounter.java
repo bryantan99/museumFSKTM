@@ -14,7 +14,7 @@ public class TicketCounter {
     private int numberOfTicketSold;
 
     public TicketCounter() {
-        this.isOperating = true;
+        this.isOperating = false;
         this.numberOfTicketSold = 0;
     }
 
