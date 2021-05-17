@@ -1,16 +1,14 @@
 package museum;
 
 import constant.Constant;
+import gui.ManagerInterface;
 import turnstile.EntranceTurnstile;
 import turnstile.ExitTurnstile;
 import turnstile.Turnstile;
 import utilities.CalendarUtils;
 import utilities.EntranceUtils;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Museum {
 
@@ -79,8 +77,22 @@ public class Museum {
 
         ticket.updateLeaveTime(timestamp);
         visitorList.add(ticket);
+
+        addTicketDataToMuseumTable(timestamp, ticket);
+
         String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered museum.";
         System.out.printf("%-60s[No. of people in the museum : %-3d] [Leaving time: %-5s] [Staying time: %-3s minutes]\n", enterMsg, getTotalNumOfPeopleInMuseum(), CalendarUtils.toHHmmString(ticket.getLeaveTime()), ticket.getStayTimeInMinute());
+    }
+
+    private void addTicketDataToMuseumTable(Calendar timestamp, Ticket ticket) {
+        Vector<String> ticketVector = new Vector<>();
+        ticketVector.add(CalendarUtils.toHHmmString(timestamp));
+        ticketVector.add(ticket.getTicketId());
+        ticketVector.add(String.valueOf(ticket.getStayTimeInMinute()));
+        ticketVector.add(CalendarUtils.toHHmmString(ticket.getLeaveTime()));
+        ticketVector.add(String.valueOf(this.getTotalNumOfPeopleInMuseum()));
+        ManagerInterface.museumTable.getTableData().add(ticketVector);
+        ManagerInterface.museumTable.getTableModel().fireTableDataChanged();
     }
 
     private boolean ifAddVisitorToMuseum() {

@@ -74,4 +74,7 @@ public class TicketCounter {
         }
     }
 
+    public int getNumberOfTicketSold() {
+        return numberOfTicketSold;
+    }
 }

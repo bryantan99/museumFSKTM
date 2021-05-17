@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="museumFSKTM:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/museumFSKTM_jar</output-path>
+    <root id="root">
+      <element id="archive" name="museumFSKTM.jar">
+        <element id="module-output" name="museumFSKTM" />
+      </element>
+    </root>
+  </artifact>
+</component>

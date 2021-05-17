@@ -47,4 +47,16 @@ public final class Constant {
 
     // Museum Wait Time
     public static final int MUSEUM_WAIT_TIME = 100;
+
+    // Ticket counter table title
+    public static final String[] TICKET_TABLE_TITLE = {"Time", "Ticket IDs", "No. of tickets sold"};
+
+    // Museum table title
+    public static final String[] MUSEUM_TABLE_TITLE = {"Time", "Ticket ID", "Stay time in minutes", "Leave time", "No. of people in museum"};
+
+    // Entrance table title
+    public static final String[] ENTRANCE_TABLE_TITLE = {"Time", "Entrance", "Ticket ID", "Stay time in minutes", "Leave time"};
+
+    // Exit table title
+    public static final String[] EXIT_TABLE_TITLE = {"Time", "Exit", "Ticket ID", "Stay time in minutes", "Leave time"};
 }

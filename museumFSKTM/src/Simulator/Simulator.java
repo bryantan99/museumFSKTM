@@ -1,4 +1,4 @@
-package simulator;
+package Simulator;
 
 import constant.Constant;
 import gui.ManagerInterface;
