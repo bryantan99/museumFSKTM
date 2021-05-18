@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="museumFSKTM">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/CP_ASSIGNMENT_MUSEUM_jar/museumFSKTM.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
