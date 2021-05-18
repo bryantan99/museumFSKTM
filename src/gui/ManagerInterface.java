@@ -37,6 +37,7 @@ public class ManagerInterface {
     public static BookManageComponent northEntranceTable = new BookManageComponent(jf, Constant.ENTRANCE_TABLE_TITLE);
     public static BookManageComponent eastExitTable = new BookManageComponent(jf, Constant.EXIT_TABLE_TITLE);
     public static BookManageComponent westExitTable = new BookManageComponent(jf, Constant.EXIT_TABLE_TITLE);
+    public static JTextArea jTextArea = new JTextArea();
 
     public void init() throws Exception {
 
@@ -75,7 +76,6 @@ public class ManagerInterface {
 
         //startStimulate button
         JPanel topPanel = new JPanel();
-//        topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(bgColor);
         Box btnBox = Box.createHorizontalBox();
         JButton startBtn = new JButton("Start Stimulate");
@@ -125,6 +125,7 @@ public class ManagerInterface {
 
         Color color = new Color(203,220,217);
         JTree tree = new JTree(museum);
+        tree.setBackground(bgColor);
         MyRenderer myRenderer = new MyRenderer();
 
         myRenderer.setBackgroundNonSelectionColor(color);
@@ -168,16 +169,17 @@ public class ManagerInterface {
         splitPanePanel.add(sp,BorderLayout.NORTH);
 
         Box outputBox = Box.createHorizontalBox();
-        JTextArea jTextArea = new JTextArea("Output在这里=_=");
-        outputBox.add(jTextArea);
+        JScrollPane jScrollPane = new JScrollPane(jTextArea);
+        jTextArea.setFont(DesignUtils.getFont());
+        outputBox.add(jScrollPane);
         splitPanePanel.add(outputBox);
         jf.add(splitPanePanel);
         jf.setVisible(true);
 
-        System.out.println("jmb:"+ jmb.getLocation() +" " + jmb.getHeight());
-        System.out.println("topPanel:"+ topPanel.getLocation() +" " + topPanel.getHeight());
-        System.out.println("splitPanePanel:"+ splitPanePanel.getLocation() +" " + splitPanePanel.getHeight());
-        System.out.println("sp:"+sp.getLocation()+" " + sp.getHeight());
+//        System.out.println("jmb:"+ jmb.getLocation() +" " + jmb.getHeight());
+//        System.out.println("topPanel:"+ topPanel.getLocation() +" " + topPanel.getHeight());
+//        System.out.println("splitPanePanel:"+ splitPanePanel.getLocation() +" " + splitPanePanel.getHeight());
+//        System.out.println("sp:"+sp.getLocation()+" " + sp.getHeight());
 //        System.out.println("btm:"+bottomPanel.getLocation()+" " + bottomPanel.getHeight());
 //        System.out.println("jta:"+jta.getLocation()+" " + jta.getHeight());
     }

@@ -58,12 +58,14 @@ public class Museum {
         this.isOpen = true;
         String openMsg = CalendarUtils.toHHmmString(timestamp) + " - Museum is now opened.";
         System.out.printf("%-60s\n", openMsg);
+        ManagerInterface.jTextArea.append(openMsg+"\n");
     }
 
     public void endBusiness(Calendar timestamp) {
         this.isOpen = false;
         String closeMsg = CalendarUtils.toHHmmString(timestamp) + " - Museum is closing now.";
         System.out.printf("%-60s\n", closeMsg);
+        ManagerInterface.jTextArea.append(closeMsg+"\n");
     }
 
     public synchronized void addVisitor(Calendar timestamp, Ticket ticket) {
@@ -146,7 +148,13 @@ public class Museum {
     }
 
     public void offEntranceTurnstile(Calendar localCurrentTime) {
-        System.out.println(CalendarUtils.toHHmmString(localCurrentTime) + " - Museum's last entry time has reached. Entrance turnstiles has been shut down.");
+        String lastEntryMsg = CalendarUtils.toHHmmString(localCurrentTime) + " - Museum's last entry time has reached. Entrance turnstiles has been shut down.";
+        System.out.println(lastEntryMsg);
+        ManagerInterface.jTextArea.append(lastEntryMsg+"\n");
+    }
+
+    public String getMessage(String message){
+        return message;
     }
 
     public EntranceTurnstile getSEEntranceTurnstile() {

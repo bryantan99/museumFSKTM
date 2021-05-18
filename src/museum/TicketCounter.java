@@ -1,6 +1,7 @@
 package museum;
 
 import constant.Constant;
+import gui.ManagerInterface;
 import utilities.CalendarUtils;
 
 import java.util.ArrayList;
@@ -26,29 +27,37 @@ public class TicketCounter {
         this.isOperating = true;
         String openMsg = CalendarUtils.toHHmmString(timestamp) + " - Ticket counter is now opened.";
         System.out.printf("%-60s\n", openMsg);
+        ManagerInterface.jTextArea.append(openMsg+"\n");
     }
 
     public void stopOperate(Calendar closingTime) {
         this.isOperating = false;
         String closeMsg = CalendarUtils.toHHmmString(closingTime) + " - Ticket counter is closed.";
         System.out.printf("%-60s[No. of tickets sold : %-3d]\n", closeMsg, numberOfTicketSold);
+        ManagerInterface.jTextArea.append(closeMsg+"\n");
     }
 
     public synchronized List<Ticket> sellTicket(Calendar sellTime, int ticketAmount) {
         if (!isOperating()) {
-            System.out.println("Ticket counter is closed.");
+            String ticketCounterClosedMsg = "Ticket counter is closed.";
+            System.out.println(ticketCounterClosedMsg);
+            ManagerInterface.jTextArea.append(ticketCounterClosedMsg+"\n");
             return Collections.emptyList();
         }
 
         if (numberOfTicketSold >= Constant.MAX_VISITOR_PER_DAY) {
-            System.out.println(numberOfTicketSold + " tickets has already been sold out.");
+            String ticketSoldOutMsg = numberOfTicketSold + " tickets has already been sold out.";
+            System.out.println(ticketSoldOutMsg);
             stopOperate(sellTime);
+            ManagerInterface.jTextArea.append(sellTime+ " - "+ticketSoldOutMsg+"\n");
             return Collections.emptyList();
         }
 
         int remainingNumberOfTicket = Constant.MAX_VISITOR_PER_DAY - numberOfTicketSold;
         if (ticketAmount > remainingNumberOfTicket) {
-            System.out.println("Not enough tickets for " + ticketAmount + " person(s). Remaining ticket : " + remainingNumberOfTicket);
+            String notEnoughTicketMsg = "Not enough tickets for " + ticketAmount + " person(s). Remaining ticket : " + remainingNumberOfTicket;
+            System.out.println(notEnoughTicketMsg);
+            ManagerInterface.jTextArea.append(sellTime+ " - "+ notEnoughTicketMsg+"\n");
             return Collections.emptyList();
         }
 

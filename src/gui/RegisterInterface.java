@@ -1,6 +1,7 @@
 package gui;
 
 import component.BackGroundPanel;
+import database.museum_user;
 import utilities.PathUtils;
 import utilities.ScreenUtils;
 
@@ -51,15 +52,14 @@ public class RegisterInterface {
         pBox.add(Box.createHorizontalStrut(20));
         pBox.add(pField);
 
-        //组装手机号
-        Box tBox = Box.createHorizontalBox();
-        JLabel tLabel = new JLabel("Phone Num:");
-        JTextField tField = new JTextField(15);
-
-        tBox.add(tLabel);
-        tBox.add(Box.createHorizontalStrut(20));
-        tBox.add(tField);
-
+//        //组装手机号
+//        Box tBox = Box.createHorizontalBox();
+//        JLabel tLabel = new JLabel("Phone Num:");
+//        JTextField tField = new JTextField(15);
+//
+//        tBox.add(tLabel);
+//        tBox.add(Box.createHorizontalStrut(20));
+//        tBox.add(tField);
 
         Box btnBox = Box.createHorizontalBox();
         JButton registBtn = new JButton("Register");
@@ -68,7 +68,17 @@ public class RegisterInterface {
         registBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(uField.getText()!=null && pField.getText()!=null){
+                    museum_user.users.put(uField.getText(),pField.getText());
+                    JOptionPane.showMessageDialog(jf, "Register successfully! Login to Manager Panel.");
+                    try {
+                        new ManagerInterface().init();
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                }else if(uField.getText() == null || pField.getText() == null){
+                    JOptionPane.showMessageDialog(jf, "Please fill in username and password!");
+                }
             }
         });
 
@@ -96,7 +106,7 @@ public class RegisterInterface {
         vBox.add(pBox);
         vBox.add(Box.createVerticalStrut(20));
         vBox.add(Box.createVerticalStrut(20));
-        vBox.add(tBox);
+//        vBox.add(tBox);
         vBox.add(Box.createVerticalStrut(30));
         vBox.add(btnBox);
 
