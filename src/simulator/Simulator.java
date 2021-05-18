@@ -298,6 +298,12 @@ public class Simulator {
                     e.printStackTrace();
                 }
             }
+
+            int numberOfTickectSold = counter.getNumberOfTicketSold();
+            ManagerInterface.jTextArea.append("No visitors in museum. Museum ends operating.\n");
+            ManagerInterface.jTextArea.append("Total number of ticket sold: " + numberOfTickectSold + "\n");
+
+
         }
     }
 

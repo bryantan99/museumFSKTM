@@ -18,6 +18,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ManagerInterface {
 
@@ -176,14 +178,16 @@ public class ManagerInterface {
         jf.add(splitPanePanel);
         jf.setVisible(true);
 
-//        System.out.println("jmb:"+ jmb.getLocation() +" " + jmb.getHeight());
-//        System.out.println("topPanel:"+ topPanel.getLocation() +" " + topPanel.getHeight());
-//        System.out.println("splitPanePanel:"+ splitPanePanel.getLocation() +" " + splitPanePanel.getHeight());
-//        System.out.println("sp:"+sp.getLocation()+" " + sp.getHeight());
-//        System.out.println("btm:"+bottomPanel.getLocation()+" " + bottomPanel.getHeight());
-//        System.out.println("jta:"+jta.getLocation()+" " + jta.getHeight());
-    }
+        jf.addWindowListener(new WindowAdapter()
+        {
+            public void windowClosing(WindowEvent e)
+            {
+                jf.dispose();
+                System.exit(0); //calling the method is a must
+            }
+        });
 
+    }
 
     // rendered
     private class MyRenderer extends DefaultTreeCellRenderer {
