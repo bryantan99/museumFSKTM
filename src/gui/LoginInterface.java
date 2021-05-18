@@ -66,10 +66,9 @@ public class LoginInterface {
                 try {
                     new ManagerInterface().init();
                     if(!isStart){
-                        sim.startSimulate();
+                        //sim.startSimulate();
                         isStart = true;
                     }
-
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -106,6 +105,7 @@ public class LoginInterface {
     }
 
     public static void main(String[] args) throws Exception {
-        new LoginInterface().init();
+//        new LoginInterface().init();
+        new ManagerInterface().init();
     }
 }

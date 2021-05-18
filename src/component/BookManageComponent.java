@@ -35,8 +35,6 @@ public class BookManageComponent extends Box {
 //        JButton updateBtn = new JButton("modify");
 //        JButton deleteBtn = new JButton("delete");
 
-
-
 //        btnPanel.add(addBtn);
 //        btnPanel.add(updateBtn);
 //        btnPanel.add(deleteBtn);

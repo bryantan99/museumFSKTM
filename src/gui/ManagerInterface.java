@@ -11,6 +11,8 @@ import utilities.*;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
@@ -24,6 +26,10 @@ public class ManagerInterface {
 
     final int WIDTH = 1200;
     final int HEIGHT = 800;
+    final Color bgColor = new Color(203,220,217);
+
+    public Simulator sim = null;
+    private boolean isStart = false;
 
     public static BookManageComponent ticketCounterTable = new BookManageComponent(jf, Constant.TICKET_TABLE_TITLE);
     public static BookManageComponent museumTable = new BookManageComponent(jf, Constant.MUSEUM_TABLE_TITLE);
@@ -33,13 +39,16 @@ public class ManagerInterface {
     public static BookManageComponent westExitTable = new BookManageComponent(jf, Constant.EXIT_TABLE_TITLE);
 
     public void init() throws Exception {
+
+        sim = new Simulator();
+
         // set window attribute
         jf.setBounds((ScreenUtils.getScreenWidth() - WIDTH) / 2, (ScreenUtils.getScreenHeight() - HEIGHT) / 2, WIDTH, HEIGHT);
         jf.setResizable(false);
 
         // set the menu bar
         JMenuBar jmb = new JMenuBar();
-        JMenu jMenu = new JMenu("Seting");
+        JMenu jMenu = new JMenu("Setting");
         JMenuItem m1 = new JMenuItem("Switch Account");
         JMenuItem m2 = new JMenuItem("Exit");
         m1.addActionListener(new ActionListener() {
@@ -62,13 +71,38 @@ public class ManagerInterface {
         jMenu.add(m1);
         jMenu.add(m2);
         jmb.add(jMenu);
-
         jf.setJMenuBar(jmb);
 
+        //startStimulate button
+        JPanel topPanel = new JPanel();
+//        topPanel.setLayout(new BorderLayout());
+        topPanel.setBackground(bgColor);
+        Box btnBox = Box.createHorizontalBox();
+        JButton startBtn = new JButton("Start Stimulate");
+        startBtn.addActionListener(e ->{
+            try{
+                if(!isStart){
+                    sim.startSimulate();
+                    isStart = true;
+                    startBtn.setBackground(Color.lightGray);
+                    startBtn.setText("Stimulating...");
+                    startBtn.setEnabled(false);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+        btnBox.add(startBtn,Component.CENTER_ALIGNMENT);
+        topPanel.add(startBtn,Component.CENTER_ALIGNMENT);
+        jf.add(topPanel,BorderLayout.NORTH);
+
         // set the split pane
+        JPanel splitPanePanel = new JPanel();
+        splitPanePanel.setLayout(new BorderLayout());
+        splitPanePanel.setBackground(bgColor);
         JSplitPane sp = new JSplitPane();
 
-        // set continuour layout
+        // set continuous layout
         sp.setContinuousLayout(true);
         sp.setDividerLocation(200);
         sp.setDividerSize(7);
@@ -92,12 +126,13 @@ public class ManagerInterface {
         Color color = new Color(203,220,217);
         JTree tree = new JTree(museum);
         MyRenderer myRenderer = new MyRenderer();
+
         myRenderer.setBackgroundNonSelectionColor(color);
         myRenderer.setBackgroundSelectionColor(new Color(140,140,140));
-        tree.setCellRenderer(myRenderer);
 
-        tree.setBackground(color);
+        tree.setCellRenderer(myRenderer);
         tree.setSelectionRow(1);
+
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -124,24 +159,27 @@ public class ManagerInterface {
                     sp.setRightComponent(museumTable);
                     sp.setDividerLocation(200);
                 }
-
             }
         });
 
-
         sp.setRightComponent(ticketCounterTable);
         sp.setLeftComponent(tree);
+        sp.setBackground(bgColor);
+        splitPanePanel.add(sp,BorderLayout.NORTH);
 
-        /* output log  --> textArea (public static --> entranceTurnstile museum exitTurnstile)
-            list -> append
-            textArea -> scroll
-
-
-         */
-
-        jf.add(sp);
+        Box outputBox = Box.createHorizontalBox();
+        JTextArea jTextArea = new JTextArea("Output在这里=_=");
+        outputBox.add(jTextArea);
+        splitPanePanel.add(outputBox);
+        jf.add(splitPanePanel);
         jf.setVisible(true);
 
+        System.out.println("jmb:"+ jmb.getLocation() +" " + jmb.getHeight());
+        System.out.println("topPanel:"+ topPanel.getLocation() +" " + topPanel.getHeight());
+        System.out.println("splitPanePanel:"+ splitPanePanel.getLocation() +" " + splitPanePanel.getHeight());
+        System.out.println("sp:"+sp.getLocation()+" " + sp.getHeight());
+//        System.out.println("btm:"+bottomPanel.getLocation()+" " + bottomPanel.getHeight());
+//        System.out.println("jta:"+jta.getLocation()+" " + jta.getHeight());
     }
 
 

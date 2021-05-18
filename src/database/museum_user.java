@@ -6,6 +6,6 @@ public class museum_user {
     public static HashMap<String, String> users = new HashMap<>();
 
     static{
-        users.put("admin", "123");
+        users.put("1", "1");
     }
 }
