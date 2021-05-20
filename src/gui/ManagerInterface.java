@@ -3,16 +3,11 @@ package gui;
 import simulator.Simulator;
 import component.BookManageComponent;
 import constant.Constant;
-import museum.Museum;
-import museum.Ticket;
-import museum.TicketCounter;
 import utilities.*;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
-import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
@@ -52,27 +47,14 @@ public class ManagerInterface {
         // set the menu bar
         JMenuBar jmb = new JMenuBar();
         JMenu jMenu = new JMenu("Setting");
-        JMenuItem m1 = new JMenuItem("Switch Account");
-        JMenuItem m2 = new JMenuItem("Exit");
-        m1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    new LoginInterface().init();
-                    jf.dispose();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        m2.addActionListener(new ActionListener() {
+        JMenuItem exitItem = new JMenuItem("Exit");
+        exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
-        jMenu.add(m1);
-        jMenu.add(m2);
+        jMenu.add(exitItem);
         jmb.add(jMenu);
         jf.setJMenuBar(jmb);
 
@@ -208,7 +190,6 @@ public class ManagerInterface {
         //
         @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-            //使用默认绘制
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
             ImageIcon image = null;
@@ -239,25 +220,5 @@ public class ManagerInterface {
             this.setIcon(image);
             return this;
         }
-    }
-
-    public BookManageComponent getMuseumTable() {
-        return museumTable;
-    }
-
-    public BookManageComponent getSouthEntranceTable() {
-        return southEntranceTable;
-    }
-
-    public BookManageComponent getNorthEntranceTable() {
-        return northEntranceTable;
-    }
-
-    public BookManageComponent getEastExitTable() {
-        return eastExitTable;
-    }
-
-    public BookManageComponent getWestExitTable() {
-        return westExitTable;
     }
 }

@@ -55,7 +55,6 @@ public class LoginInterface {
         // Button
         Box btnBox = Box.createHorizontalBox();
         JButton loginBtn = new JButton("Sign in");
-        JButton registBtn = new JButton("Sign up");
 
         loginBtn.addActionListener(e -> {
             String username = uField.getText().trim();
@@ -77,19 +76,8 @@ public class LoginInterface {
             }
         });
 
-        registBtn.addActionListener(e -> {
-            try {
-                new RegisterInterface().init();
-                jf.dispose();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
-
 
         btnBox.add(loginBtn);
-        btnBox.add(Box.createHorizontalStrut(100));
-        btnBox.add(registBtn);
 
         vBox.add(Box.createVerticalStrut(50));
         vBox.add(uBox);
