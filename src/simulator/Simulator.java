@@ -90,7 +90,6 @@ public class Simulator {
         return localCurrentTime.before(MUSEUM_END_TIME) || localCurrentTime.equals(MUSEUM_END_TIME) || !museum.getVisitorList().isEmpty();
     }
 
-
     private class SellTicket implements Runnable {
         @Override
         public void run() {
@@ -112,15 +111,6 @@ public class Simulator {
                     List<Ticket> purchasedTicketList = counter.sellTicket(localCurrentTime, RandomizeUtils.randomizeNumberOfTicketSold());
                     if (purchasedTicketList != null && !purchasedTicketList.isEmpty()) {
                         turnStilePool.addAll(purchasedTicketList);
-                        purchasedTicketList.forEach((ticket) -> {
-                            Vector<String> ticketVector = new Vector<>();
-                            ticketVector.add(CalendarUtils.toHHmmString(currentTime));
-                            ticketVector.add(ticket.getTicketId());
-                            ticketVector.add(String.valueOf(counter.getNumberOfTicketSold()));
-                            ManagerInterface.ticketCounterTable.getTableData().add(ticketVector);
-                            ManagerInterface.ticketCounterTable.getTableModel().fireTableDataChanged();
-                        });
-
                     }
                     nextTicketSellTime.add(Calendar.MINUTE, RandomizeUtils.randomizeGapBetweenTicketPurchases());
                 }
@@ -244,7 +234,7 @@ public class Simulator {
                     localCurrentTime = currentTime;
                 }
 
-                if (enturnTunstileCondition(localCurrentTime)) {
+                if (enterTurnstileCondition(localCurrentTime)) {
                     Ticket nextVisitor = turnStilePool.remove(0);
                     if(museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM && museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM){
                         if (EntranceUtils.toSouthEntrance()) {
@@ -269,8 +259,11 @@ public class Simulator {
         }
     }
 
-    private boolean enturnTunstileCondition(Calendar localCurrentTime) {
-        return museum.isOpen() && !turnStilePool.isEmpty() && (museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM || museum.getSEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM) && localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME);
+    private boolean enterTurnstileCondition(Calendar localCurrentTime) {
+        return  museum.isOpen() &&
+                !turnStilePool.isEmpty() &&
+                (museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM || museum.getSEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM) &&
+                localCurrentTime.before(MUSEUM_LAST_ENTRY_TIME);
     }
 
     private class ExitTurnstile implements Runnable {
@@ -299,12 +292,15 @@ public class Simulator {
                 }
             }
 
-            int numberOfTickectSold = counter.getNumberOfTicketSold();
-            ManagerInterface.jTextArea.append("No visitors in museum. Museum ends operating.\n");
-            ManagerInterface.jTextArea.append("Total number of ticket sold: " + numberOfTickectSold + "\n");
-
-
+            printProgramEnd();
         }
+    }
+
+    private void printProgramEnd() {
+        ManagerInterface.jTextArea.append("-----------------------------------------------------------------------------\n");
+        ManagerInterface.jTextArea.append("No visitors in museum. Museum ends operating.\n");
+        ManagerInterface.jTextArea.append("Total number of ticket sold: " + counter.getNumberOfTicketSold() + "\n");
+        ManagerInterface.jTextArea.append("-----------------------------------------------------------------------------");
     }
 
     private boolean exitMuseumCondition(Calendar localCurrentTime, Calendar localEndTime) {

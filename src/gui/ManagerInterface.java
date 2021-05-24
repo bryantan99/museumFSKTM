@@ -1,7 +1,7 @@
 package gui;
 
+import component.TableComponent;
 import simulator.Simulator;
-import component.BookManageComponent;
 import constant.Constant;
 import utilities.*;
 
@@ -11,29 +11,26 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class ManagerInterface {
 
+    public static JFrame jf = new JFrame(Constant.WINDOW_TITLE);
 
-    public static JFrame jf = new JFrame("The information of Museum");
-
-    final int WIDTH = 1200;
-    final int HEIGHT = 800;
-    final Color bgColor = new Color(203,220,217);
+    final int WIDTH = Constant.WINDOW_WIDTH;
+    final int HEIGHT = Constant.WINDOW_HEIGHT;
+    final Color BG_COLOR = Constant.WINDOW_BACKGROUND_COLOUR;
 
     public Simulator sim = null;
     private boolean isStart = false;
 
-    public static BookManageComponent ticketCounterTable = new BookManageComponent(jf, Constant.TICKET_TABLE_TITLE);
-    public static BookManageComponent museumTable = new BookManageComponent(jf, Constant.MUSEUM_TABLE_TITLE);
-    public static BookManageComponent southEntranceTable = new BookManageComponent(jf, Constant.ENTRANCE_TABLE_TITLE);
-    public static BookManageComponent northEntranceTable = new BookManageComponent(jf, Constant.ENTRANCE_TABLE_TITLE);
-    public static BookManageComponent eastExitTable = new BookManageComponent(jf, Constant.EXIT_TABLE_TITLE);
-    public static BookManageComponent westExitTable = new BookManageComponent(jf, Constant.EXIT_TABLE_TITLE);
+    public static TableComponent ticketCounterTable = new TableComponent(jf, Constant.TICKET_TABLE_TITLE);
+    public static TableComponent museumTable = new TableComponent(jf, Constant.MUSEUM_TABLE_TITLE);
+    public static TableComponent southEntranceTable = new TableComponent(jf, Constant.ENTRANCE_TABLE_TITLE);
+    public static TableComponent northEntranceTable = new TableComponent(jf, Constant.ENTRANCE_TABLE_TITLE);
+    public static TableComponent eastExitTable = new TableComponent(jf, Constant.EXIT_TABLE_TITLE);
+    public static TableComponent westExitTable = new TableComponent(jf, Constant.EXIT_TABLE_TITLE);
     public static JTextArea jTextArea = new JTextArea();
 
     public void init() throws Exception {
@@ -44,32 +41,18 @@ public class ManagerInterface {
         jf.setBounds((ScreenUtils.getScreenWidth() - WIDTH) / 2, (ScreenUtils.getScreenHeight() - HEIGHT) / 2, WIDTH, HEIGHT);
         jf.setResizable(false);
 
-        // set the menu bar
-        JMenuBar jmb = new JMenuBar();
-        JMenu jMenu = new JMenu("Setting");
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        jMenu.add(exitItem);
-        jmb.add(jMenu);
-        jf.setJMenuBar(jmb);
-
         //startStimulate button
         JPanel topPanel = new JPanel();
-        topPanel.setBackground(bgColor);
+        topPanel.setBackground(BG_COLOR);
         Box btnBox = Box.createHorizontalBox();
-        JButton startBtn = new JButton("Start Stimulate");
+        JButton startBtn = new JButton(Constant.BUTTON_START);
         startBtn.addActionListener(e ->{
             try{
                 if(!isStart){
                     sim.startSimulate();
                     isStart = true;
                     startBtn.setBackground(Color.lightGray);
-                    startBtn.setText("Stimulating...");
+                    startBtn.setText(Constant.BUTTON_SIMULATING);
                     startBtn.setEnabled(false);
                 }
             } catch (Exception exception) {
@@ -83,7 +66,7 @@ public class ManagerInterface {
         // set the split pane
         JPanel splitPanePanel = new JPanel();
         splitPanePanel.setLayout(new BorderLayout());
-        splitPanePanel.setBackground(bgColor);
+        splitPanePanel.setBackground(BG_COLOR);
         JSplitPane sp = new JSplitPane();
 
         // set continuous layout
@@ -92,13 +75,13 @@ public class ManagerInterface {
         sp.setDividerSize(7);
 
         // set left content
-        DefaultMutableTreeNode museum = new DefaultMutableTreeNode("Museum");
-        DefaultMutableTreeNode ticketCounter = new DefaultMutableTreeNode("Ticket Counter");
-        DefaultMutableTreeNode usersInMuseum = new DefaultMutableTreeNode("Customers In Museum");
-        DefaultMutableTreeNode usersInSouthEntrance = new DefaultMutableTreeNode("Customers In South Entrance");
-        DefaultMutableTreeNode usersInNorthEntrance = new DefaultMutableTreeNode("Customers In North Entrance");
-        DefaultMutableTreeNode usersInEastExit = new DefaultMutableTreeNode("Customers In East Exit");
-        DefaultMutableTreeNode usersInWestExit = new DefaultMutableTreeNode("Customers In West Exit");
+        DefaultMutableTreeNode museum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_MUSEUM);
+        DefaultMutableTreeNode ticketCounter = new DefaultMutableTreeNode(Constant.LEFT_PANEL_TICKET_COUNTER);
+        DefaultMutableTreeNode usersInMuseum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_IN_MUSEUM);
+        DefaultMutableTreeNode usersInSouthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_SOUTH_ENTRANCE);
+        DefaultMutableTreeNode usersInNorthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_NORTH_ENTRANCE);
+        DefaultMutableTreeNode usersInEastExit = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_EAST_EXIT);
+        DefaultMutableTreeNode usersInWestExit = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_WEST_EXIT);
 
         museum.add(ticketCounter);
         museum.add(usersInMuseum);
@@ -109,7 +92,7 @@ public class ManagerInterface {
 
         Color color = new Color(203,220,217);
         JTree tree = new JTree(museum);
-        tree.setBackground(bgColor);
+        tree.setBackground(BG_COLOR);
         MyRenderer myRenderer = new MyRenderer();
 
         myRenderer.setBackgroundNonSelectionColor(color);
@@ -149,7 +132,7 @@ public class ManagerInterface {
 
         sp.setRightComponent(ticketCounterTable);
         sp.setLeftComponent(tree);
-        sp.setBackground(bgColor);
+        sp.setBackground(BG_COLOR);
         splitPanePanel.add(sp,BorderLayout.NORTH);
 
         Box outputBox = Box.createHorizontalBox();

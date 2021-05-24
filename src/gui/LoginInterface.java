@@ -93,7 +93,6 @@ public class LoginInterface {
     }
 
     public static void main(String[] args) throws Exception {
-        new LoginInterface().init();
-//        new ManagerInterface().init();
+        new ManagerInterface().init();
     }
 }

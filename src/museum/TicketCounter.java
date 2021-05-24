@@ -4,10 +4,7 @@ import constant.Constant;
 import gui.ManagerInterface;
 import utilities.CalendarUtils;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class TicketCounter {
 
@@ -63,11 +60,22 @@ public class TicketCounter {
 
         List<Ticket> soldTicketList = new ArrayList<>();
         for (int i = 0; i < ticketAmount; i++) {
-            soldTicketList.add(new Ticket(numberOfTicketSold + 1));
+            Ticket soldTicket = new Ticket(numberOfTicketSold + 1);
+            soldTicketList.add(soldTicket);
             numberOfTicketSold++;
+            emitTableDataChanged(sellTime, soldTicket);
         }
         printSellTicket(sellTime, soldTicketList);
         return soldTicketList;
+    }
+
+    private void emitTableDataChanged(Calendar currentTime, Ticket ticket) {
+        Vector<String> ticketVector = new Vector<>();
+        ticketVector.add(CalendarUtils.toHHmmString(currentTime));
+        ticketVector.add(ticket.getTicketId());
+        ticketVector.add(String.valueOf(numberOfTicketSold));
+        ManagerInterface.ticketCounterTable.getTableData().add(ticketVector);
+        ManagerInterface.ticketCounterTable.getTableModel().fireTableDataChanged();
     }
 
     private void printSellTicket(Calendar timestamp, List<Ticket> soldTicketList) {

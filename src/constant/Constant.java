@@ -1,7 +1,6 @@
 package constant;
 
-import java.util.Arrays;
-import java.util.List;
+import java.awt.*;
 
 public final class Constant {
 
@@ -20,43 +19,59 @@ public final class Constant {
     public static final String EAST_EXIT = "EE";
     public static final String WEST_EXIT = "WE";
 
+    //  Important event timestamp
     public static final String MUSEUM_START_TIME = "09:00";
     public static final String MUSEUM_END_TIME = "18:00";
     public static final String TICKET_COUNTER_END_TIME = "17:00";
     public static final String TICKET_COUNTER_START_TIME = "08:00";
     public static final String MUSEUM_LAST_ENTRY_TIME = "17:10";
 
-
-    // ThreadPool
+    //  ThreadPool size
     public static final int THREAD_NUM = 6;
 
-    // Turnstile Num
+    //  Turnstile Num
     public static final int TURNSTILE_NUM = 4;
 
-    // Thread Time
+    //  Thread Time
     public static final int SLEEP_TIME = 150;
 
-    // Turnstile Thread Time
+    //  Turnstile Thread Time
     public static final int TURNSTILE_SLEEP_TIME = 150;
 
-    // Entrance Wait Time
+    //  Entrance Wait Time
     public static final int Entrance_WAIT_TIME = 100;
 
-    // Exit Wait Time
+    //  Exit Wait Time
     public static final int EXIT_WAIT_TIME = 100;
 
     // Museum Wait Time
     public static final int MUSEUM_WAIT_TIME = 100;
 
+    //  GUI constants
+    public static final int WINDOW_WIDTH = 1200;
+    public static final int WINDOW_HEIGHT = 800;
+    public static final Color WINDOW_BACKGROUND_COLOUR = new Color(203, 220, 217);
+
+    public static final String WINDOW_TITLE = "FSKTM Museum's Information";
+    public static final String BUTTON_START = "Start Simulate";
+    public static final String BUTTON_SIMULATING = "Simulating...";
+    public static final String LEFT_PANEL_MUSEUM = "Museum";
+    public static final String LEFT_PANEL_TICKET_COUNTER = "Ticket Counter";
+    public static final String LEFT_PANEL_VISITORS_IN_MUSEUM = "Visitors in museum";
+    public static final String LEFT_PANEL_VISITORS_AT_SOUTH_ENTRANCE = "Visitors at South Entrance";
+    public static final String LEFT_PANEL_VISITORS_AT_NORTH_ENTRANCE = "Visitors at North Entrance";
+    public static final String LEFT_PANEL_VISITORS_AT_EAST_EXIT = "Visitors at East Exit";
+    public static final String LEFT_PANEL_VISITORS_AT_WEST_EXIT = "Visitors at West Exit";
+
     // Ticket counter table title
-    public static final String[] TICKET_TABLE_TITLE = {"Time", "Ticket IDs", "No. of tickets sold"};
+    public static final String[] TICKET_TABLE_TITLE = {"Time", "Ticket ID", "Total No. of Tickets Sold"};
 
     // Museum table title
-    public static final String[] MUSEUM_TABLE_TITLE = {"Time", "Ticket ID", "Stay time in minutes", "Leave time", "No. of people in museum"};
+    public static final String[] MUSEUM_TABLE_TITLE = {"Time", "Ticket ID", "Duration of Stay (minute)", "Leave time", "Current Total No. of Visitors In Museum"};
 
     // Entrance table title
-    public static final String[] ENTRANCE_TABLE_TITLE = {"Time", "Entrance", "Ticket ID", "Stay time in minutes", "Leave time"};
+    public static final String[] ENTRANCE_TABLE_TITLE = {"Time", "Entrance", "Ticket ID", "Duration of Stay (minute)", "Leave time"};
 
     // Exit table title
-    public static final String[] EXIT_TABLE_TITLE = {"Time", "Exit", "Ticket ID", "Stay time in minutes", "Leave time"};
+    public static final String[] EXIT_TABLE_TITLE = {"Time", "Exit", "Ticket ID", "Duration of Stay (minute)", "Leave time"};
 }

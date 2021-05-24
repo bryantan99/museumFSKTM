@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-public class BookManageComponent extends Box {
+public class TableComponent extends Box {
     final int WIDTH=850;
     final int HEIGHT=600;
 
@@ -18,7 +18,7 @@ public class BookManageComponent extends Box {
     private DefaultTableModel tableModel;
     private String[] ts;
 
-    public BookManageComponent(JFrame jf, String ts[]){
+    public TableComponent(JFrame jf, String ts[]){
         // vertical layout
         super(BoxLayout.Y_AXIS);
 
@@ -30,14 +30,6 @@ public class BookManageComponent extends Box {
         btnPanel.setBackground(color);
         btnPanel.setMaximumSize(new Dimension(WIDTH,80));
         btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-//        JButton addBtn = new JButton("add");
-//        JButton updateBtn = new JButton("modify");
-//        JButton deleteBtn = new JButton("delete");
-
-//        btnPanel.add(addBtn);
-//        btnPanel.add(updateBtn);
-//        btnPanel.add(deleteBtn);
 
         this.add(btnPanel);
 
