@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="museumFSKTM:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/museumFSKTM_jar</output-path>
+    <root id="archive" name="museumFSKTM.jar">
+      <element id="module-output" name="museumFSKTM" />
+    </root>
+  </artifact>
+</component>
