@@ -45,7 +45,7 @@ public class ExitTurnstile extends Turnstile {
                 return;
             }
 
-            String turnstileId = tempExitTurnstile.turnstileId;
+            String turnstileId = tempExitTurnstile.turnstileId + RandomizeUtils.randomizeTurnstileId();
 
             addTicketDataToExitTable(timestamp, ticket, turnstileId);
 
@@ -64,7 +64,7 @@ public class ExitTurnstile extends Turnstile {
         ticketVector.add(ticket.getTicketId());
         ticketVector.add(String.valueOf(ticket.getStayTimeInMinute()));
         ticketVector.add(CalendarUtils.toHHmmString(ticket.getLeaveTime()));
-        if(turnstileId.substring(0, 2).equals(Constant.EAST_EXIT)){
+        if(turnstileId.startsWith(Constant.EAST_EXIT)){
             ManagerInterface.eastExitTable.getTableData().add(ticketVector);
             ManagerInterface.eastExitTable.getTableModel().fireTableDataChanged();
         }else{
