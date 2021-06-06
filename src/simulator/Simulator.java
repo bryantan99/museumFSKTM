@@ -107,7 +107,7 @@ public class Simulator {
                     localNextSellTicketTime = nextTicketSellTime;
                 }
 
-                if (localCurrentTime.equals(nextTicketSellTime) || localCurrentTime.after(nextTicketSellTime) && counter.isOperating()) {
+                if ((localCurrentTime.equals(nextTicketSellTime) || localCurrentTime.after(nextTicketSellTime)) && counter.isOperating()) {
                     List<Ticket> purchasedTicketList = counter.sellTicket(localCurrentTime, RandomizeUtils.randomizeNumberOfTicketSold());
                     if (purchasedTicketList != null && !purchasedTicketList.isEmpty()) {
                         turnStilePool.addAll(purchasedTicketList);

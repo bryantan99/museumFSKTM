@@ -45,8 +45,11 @@ public class EntranceTurnstile extends Turnstile {
 
         addTicketDataToEntraceTable(timestamp, ticket, tempTurnstileId);
 
-        String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " tries to enter using Turnstile " + tempTurnstileId + ".";
-        System.out.printf("%-60s\n", enterMsg);
+        String enterMsg = ticket.getTicketId() + " tries to enter using Turnstile " + tempTurnstileId + ".";
+        String enterMsgWithTimestamp = CalendarUtils.toHHmmString(timestamp) + " - " + enterMsg;
+
+        addTicketDataToMuseumTable(timestamp, ticket, enterMsg);
+        System.out.printf("%-60s\n", enterMsgWithTimestamp);
     }
 
     private void addTicketDataToEntraceTable(Calendar timestamp, Ticket ticket, String turnstileId) {
@@ -63,6 +66,16 @@ public class EntranceTurnstile extends Turnstile {
             ManagerInterface.northEntranceTable.getTableData().add(ticketVector);
             ManagerInterface.northEntranceTable.getTableModel().fireTableDataChanged();
         }
+    }
+
+    private void addTicketDataToMuseumTable(Calendar timestamp, Ticket ticket, String message) {
+        Vector<String> ticketVector = new Vector<>();
+        ticketVector.add(CalendarUtils.toHHmmString(timestamp));
+        ticketVector.add(ticket.getTicketId());
+        ticketVector.add(message);
+        ticketVector.add(String.valueOf(museum.getTotalNumOfPeopleInMuseum()));
+        ManagerInterface.museumTable.getTableData().add(ticketVector);
+        ManagerInterface.museumTable.getTableModel().fireTableDataChanged();
     }
 
     private boolean judgeNumPeopleOfEntrance() {

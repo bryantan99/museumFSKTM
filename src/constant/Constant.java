@@ -48,8 +48,8 @@ public final class Constant {
     public static final int MUSEUM_WAIT_TIME = 100;
 
     //  GUI constants
-    public static final int WINDOW_WIDTH = 1200;
-    public static final int WINDOW_HEIGHT = 800;
+    public static final int WINDOW_WIDTH = 1366;
+    public static final int WINDOW_HEIGHT = 768;
     public static final Color WINDOW_BACKGROUND_COLOUR = new Color(203, 220, 217);
 
     public static final String WINDOW_TITLE = "FSKTM Museum's Information";
@@ -57,7 +57,7 @@ public final class Constant {
     public static final String BUTTON_SIMULATING = "Simulating...";
     public static final String LEFT_PANEL_MUSEUM = "Museum";
     public static final String LEFT_PANEL_TICKET_COUNTER = "Ticket Counter";
-    public static final String LEFT_PANEL_VISITORS_IN_MUSEUM = "Visitors in museum";
+    public static final String LEFT_PANEL_VISITORS_ENTRANCE_EXIT_LOGS = "Visitors Entrance / Exit Logs";
     public static final String LEFT_PANEL_VISITORS_AT_SOUTH_ENTRANCE = "Visitors at South Entrance";
     public static final String LEFT_PANEL_VISITORS_AT_NORTH_ENTRANCE = "Visitors at North Entrance";
     public static final String LEFT_PANEL_VISITORS_AT_EAST_EXIT = "Visitors at East Exit";
@@ -67,11 +67,11 @@ public final class Constant {
     public static final String[] TICKET_TABLE_TITLE = {"Time", "Ticket ID", "Total No. of Tickets Sold"};
 
     // Museum table title
-    public static final String[] MUSEUM_TABLE_TITLE = {"Time", "Ticket ID", "Duration of Stay (minute)", "Leave time", "Current Total No. of Visitors In Museum"};
+    public static final String[] MUSEUM_TABLE_TITLE = {"Time", "Ticket ID", "Description", "Current Total No. of Visitors In Museum"};
 
     // Entrance table title
-    public static final String[] ENTRANCE_TABLE_TITLE = {"Time", "Entrance", "Ticket ID", "Duration of Stay (minute)", "Leave time"};
+    public static final String[] ENTRANCE_TABLE_TITLE = {"Time", "Entrance", "Ticket ID", "Duration of Stay (minute)", "Expected Leave time"};
 
     // Exit table title
-    public static final String[] EXIT_TABLE_TITLE = {"Time", "Exit", "Ticket ID", "Duration of Stay (minute)", "Leave time"};
+    public static final String[] EXIT_TABLE_TITLE = {"Visitor Left Museum's Time", "Exit", "Ticket ID", "Duration of Stay (minute)", "Visitor Arrived At Exit Turnstile's Time"};
 }

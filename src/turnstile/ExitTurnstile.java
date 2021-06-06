@@ -49,8 +49,11 @@ public class ExitTurnstile extends Turnstile {
 
             addTicketDataToExitTable(timestamp, ticket, turnstileId);
 
-            String leaveMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has left using Turnstile " + turnstileId + ". ";
-            System.out.printf("%-60s[No. of people in the museum : %-3d]\n", leaveMsg, museum.getTotalNumOfPeopleInMuseum());
+            String leaveMsg = ticket.getTicketId() + " has left using Turnstile " + turnstileId + ". ";
+            String leaveMsgWithTimestamp = CalendarUtils.toHHmmString(timestamp) + " - " + leaveMsg;
+
+            addTicketDataToMuseumTable(timestamp, ticket, leaveMsg);
+            System.out.printf("%-60s[No. of people in the museum : %-3d]\n", leaveMsgWithTimestamp, museum.getTotalNumOfPeopleInMuseum());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -71,6 +74,16 @@ public class ExitTurnstile extends Turnstile {
             ManagerInterface.westExitTable.getTableData().add(ticketVector);
             ManagerInterface.westExitTable.getTableModel().fireTableDataChanged();
         }
+    }
+
+    private void addTicketDataToMuseumTable(Calendar timestamp, Ticket ticket, String message) {
+        Vector<String> ticketVector = new Vector<>();
+        ticketVector.add(CalendarUtils.toHHmmString(timestamp));
+        ticketVector.add(ticket.getTicketId());
+        ticketVector.add(message);
+        ticketVector.add(String.valueOf(museum.getTotalNumOfPeopleInMuseum()));
+        ManagerInterface.museumTable.getTableData().add(ticketVector);
+        ManagerInterface.museumTable.getTableModel().fireTableDataChanged();
     }
 
     private boolean judgePeopleNumOfExit() {

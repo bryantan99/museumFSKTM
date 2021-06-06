@@ -46,7 +46,7 @@ public class TicketCounter {
             String ticketSoldOutMsg = numberOfTicketSold + " tickets has already been sold out.";
             System.out.println(ticketSoldOutMsg);
             stopOperate(sellTime);
-            ManagerInterface.jTextArea.append(sellTime+ " - "+ticketSoldOutMsg+"\n");
+            ManagerInterface.jTextArea.append(CalendarUtils.toHHmmString(sellTime) + " - "+ticketSoldOutMsg+"\n");
             return Collections.emptyList();
         }
 
@@ -54,7 +54,7 @@ public class TicketCounter {
         if (ticketAmount > remainingNumberOfTicket) {
             String notEnoughTicketMsg = "Not enough tickets for " + ticketAmount + " person(s). Remaining ticket : " + remainingNumberOfTicket;
             System.out.println(notEnoughTicketMsg);
-            ManagerInterface.jTextArea.append(sellTime+ " - "+ notEnoughTicketMsg+"\n");
+            ManagerInterface.jTextArea.append(CalendarUtils.toHHmmString(sellTime) + " - "+ notEnoughTicketMsg+"\n");
             return Collections.emptyList();
         }
 

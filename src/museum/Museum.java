@@ -80,18 +80,18 @@ public class Museum {
         ticket.updateLeaveTime(timestamp);
         visitorList.add(ticket);
 
-        addTicketDataToMuseumTable(timestamp, ticket);
+        String enterMsg = ticket.getTicketId() + " has entered museum.";
+        String enterMsgWithTimestamp = CalendarUtils.toHHmmString(timestamp) + " - " + enterMsg;
 
-        String enterMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " has entered museum.";
-        System.out.printf("%-60s[No. of people in the museum : %-3d] [Leaving time: %-5s] [Staying time: %-3s minutes]\n", enterMsg, getTotalNumOfPeopleInMuseum(), CalendarUtils.toHHmmString(ticket.getLeaveTime()), ticket.getStayTimeInMinute());
+        addTicketDataToMuseumTable(timestamp, ticket, enterMsg);
+        System.out.printf("%-60s[No. of people in the museum : %-3d] [Leaving time: %-5s] [Staying time: %-3s minutes]\n", enterMsgWithTimestamp, getTotalNumOfPeopleInMuseum(), CalendarUtils.toHHmmString(ticket.getLeaveTime()), ticket.getStayTimeInMinute());
     }
 
-    private void addTicketDataToMuseumTable(Calendar timestamp, Ticket ticket) {
+    private void addTicketDataToMuseumTable(Calendar timestamp, Ticket ticket, String message) {
         Vector<String> ticketVector = new Vector<>();
         ticketVector.add(CalendarUtils.toHHmmString(timestamp));
         ticketVector.add(ticket.getTicketId());
-        ticketVector.add(String.valueOf(ticket.getStayTimeInMinute()));
-        ticketVector.add(CalendarUtils.toHHmmString(ticket.getLeaveTime()));
+        ticketVector.add(message);
         ticketVector.add(String.valueOf(this.getTotalNumOfPeopleInMuseum()));
         ManagerInterface.museumTable.getTableData().add(ticketVector);
         ManagerInterface.museumTable.getTableModel().fireTableDataChanged();
@@ -117,8 +117,13 @@ public class Museum {
 
         this.visitorList.remove(ticket);
         decideExitTurnstile(ticket);
-        String leaveMsg = CalendarUtils.toHHmmString(timestamp) + " - " + ticket.getTicketId() + " wants to leave the museum.";
-        System.out.printf("%-60s\n", leaveMsg);
+
+        String leaveMsg = ticket.getTicketId() + " wants to leave the museum.";
+        String leaveMsgWithTimestamp = CalendarUtils.toHHmmString(timestamp) + " - " + leaveMsg;
+
+        addTicketDataToMuseumTable(timestamp, ticket, leaveMsg);
+        System.out.printf("%-60s\n", leaveMsgWithTimestamp);
+
         notifyAll();
     }
 

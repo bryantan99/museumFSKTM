@@ -77,7 +77,7 @@ public class ManagerInterface {
         // set left content
         DefaultMutableTreeNode museum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_MUSEUM);
         DefaultMutableTreeNode ticketCounter = new DefaultMutableTreeNode(Constant.LEFT_PANEL_TICKET_COUNTER);
-        DefaultMutableTreeNode usersInMuseum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_IN_MUSEUM);
+        DefaultMutableTreeNode usersInMuseum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_ENTRANCE_EXIT_LOGS);
         DefaultMutableTreeNode usersInSouthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_SOUTH_ENTRANCE);
         DefaultMutableTreeNode usersInNorthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_NORTH_ENTRANCE);
         DefaultMutableTreeNode usersInEastExit = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_EAST_EXIT);
