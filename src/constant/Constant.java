@@ -57,11 +57,11 @@ public final class Constant {
     public static final String BUTTON_SIMULATING = "Simulating...";
     public static final String LEFT_PANEL_MUSEUM = "Museum";
     public static final String LEFT_PANEL_TICKET_COUNTER = "Ticket Counter";
-    public static final String LEFT_PANEL_VISITORS_ENTRANCE_EXIT_LOGS = "Visitors Entrance / Exit Logs";
-    public static final String LEFT_PANEL_VISITORS_AT_SOUTH_ENTRANCE = "Visitors at South Entrance";
-    public static final String LEFT_PANEL_VISITORS_AT_NORTH_ENTRANCE = "Visitors at North Entrance";
-    public static final String LEFT_PANEL_VISITORS_AT_EAST_EXIT = "Visitors at East Exit";
-    public static final String LEFT_PANEL_VISITORS_AT_WEST_EXIT = "Visitors at West Exit";
+    public static final String LEFT_PANEL_VISITORS_ENTRANCE_EXIT_LOG = "Visitors Entrance / Exit Log";
+    public static final String LEFT_PANEL_SOUTH_ENTRANCE_LOG = "South Entrance Log";
+    public static final String LEFT_PANEL_NORTH_ENTRANCE_LOG = "North Entrance Log";
+    public static final String LEFT_PANEL_EAST_EXIT_LOG = "East Exit Log";
+    public static final String LEFT_PANEL_WEST_EXIT_LOG = "West Exit Log";
 
     // Ticket counter table title
     public static final String[] TICKET_TABLE_TITLE = {"Time", "Ticket ID", "Total No. of Tickets Sold"};

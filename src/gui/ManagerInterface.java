@@ -77,11 +77,11 @@ public class ManagerInterface {
         // set left content
         DefaultMutableTreeNode museum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_MUSEUM);
         DefaultMutableTreeNode ticketCounter = new DefaultMutableTreeNode(Constant.LEFT_PANEL_TICKET_COUNTER);
-        DefaultMutableTreeNode usersInMuseum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_ENTRANCE_EXIT_LOGS);
-        DefaultMutableTreeNode usersInSouthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_SOUTH_ENTRANCE);
-        DefaultMutableTreeNode usersInNorthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_NORTH_ENTRANCE);
-        DefaultMutableTreeNode usersInEastExit = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_EAST_EXIT);
-        DefaultMutableTreeNode usersInWestExit = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_AT_WEST_EXIT);
+        DefaultMutableTreeNode usersInMuseum = new DefaultMutableTreeNode(Constant.LEFT_PANEL_VISITORS_ENTRANCE_EXIT_LOG);
+        DefaultMutableTreeNode usersInSouthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_SOUTH_ENTRANCE_LOG);
+        DefaultMutableTreeNode usersInNorthEntrance = new DefaultMutableTreeNode(Constant.LEFT_PANEL_NORTH_ENTRANCE_LOG);
+        DefaultMutableTreeNode usersInEastExit = new DefaultMutableTreeNode(Constant.LEFT_PANEL_EAST_EXIT_LOG);
+        DefaultMutableTreeNode usersInWestExit = new DefaultMutableTreeNode(Constant.LEFT_PANEL_WEST_EXIT_LOG);
 
         museum.add(ticketCounter);
         museum.add(usersInMuseum);
@@ -157,20 +157,15 @@ public class ManagerInterface {
     // rendered
     private class MyRenderer extends DefaultTreeCellRenderer {
         private ImageIcon rootIcon = null;
-        private ImageIcon userManageIcon = null;
-        private ImageIcon bookManageIcon = null;
-        private ImageIcon borrowManageIcon = null;
-        private ImageIcon statisticsManageIcon = null;
+        private ImageIcon ticketCounterIcon = null;
+        private ImageIcon documentIcon = null;
 
         public MyRenderer() {
             rootIcon = new ImageIcon(PathUtils.getRealPath("systemManage.png"));
-            userManageIcon = new ImageIcon(PathUtils.getRealPath("userManage.png"));
-            bookManageIcon = new ImageIcon(PathUtils.getRealPath("bookManage.png"));
-            borrowManageIcon = new ImageIcon(PathUtils.getRealPath("borrowManage.png"));
-            statisticsManageIcon = new ImageIcon(PathUtils.getRealPath("statisticsManage.png"));
+            ticketCounterIcon = new ImageIcon(PathUtils.getRealPath("userManage.png"));
+            documentIcon = new ImageIcon(PathUtils.getRealPath("bookManage.png"));
         }
 
-        //
         @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
@@ -181,22 +176,22 @@ public class ManagerInterface {
                     image = rootIcon;
                     break;
                 case 1:
-                    image = userManageIcon;
+                    image = ticketCounterIcon;
                     break;
                 case 2:
-                    image = bookManageIcon;
+                    image = documentIcon;
                     break;
                 case 3:
-                    image = borrowManageIcon;
+                    image = documentIcon;
                     break;
                 case 4:
-                    image = statisticsManageIcon;
+                    image = documentIcon;
                     break;
                 case 5:
-                    image = userManageIcon;
+                    image = documentIcon;
                     break;
                 case 6:
-                    image = bookManageIcon;
+                    image = documentIcon;
                     break;
             }
 
