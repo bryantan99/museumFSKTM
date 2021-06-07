@@ -44,19 +44,13 @@ public class Simulator {
     }
 
     public void startSimulate() {
-        new Thread(new IncrementTime()).start();
-        new Thread(new SellTicket()).start();
-        new Thread(new EnterMuseum()).start();
-        new Thread(new EnterTurnstile()).start();
-        new Thread(new ExitMuseum()).start();
-        new Thread(new ExitTurnstile()).start();
-//        es.submit(new Thread(new IncrementTime()));
-//        es.submit(new Thread(new SellTicket()));
-//        es.submit(new Thread(new EnterMuseum()));
-//        es.submit(new Thread(new EnterTurnstile()));
-//        es.submit(new Thread(new ExitMuseum()));
-//        es.submit(new Thread(new ExitTurnstile()));
-//        es.shutdown();
+        es.submit(new Thread(new IncrementTime()));
+        es.submit(new Thread(new SellTicket()));
+        es.submit(new Thread(new EnterMuseum()));
+        es.submit(new Thread(new EnterTurnstile()));
+        es.submit(new Thread(new ExitMuseum()));
+        es.submit(new Thread(new ExitTurnstile()));
+        es.shutdown();
     }
 
     private class IncrementTime implements Runnable {
