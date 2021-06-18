@@ -228,10 +228,11 @@ public class Simulator {
                     localCurrentTime = currentTime;
                 }
 
-                if (enterTurnstileCondition(localCurrentTime)) {
-                    Ticket nextVisitor = turnStilePool.remove(0);
-                    if(museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM && museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM){
-                        if (EntranceUtils.toSouthEntrance()) {
+                if (enterTurnstileCondition(localCurrentTime)) { //check the condition first
+                    Ticket nextVisitor = turnStilePool.remove(0); //allow the one queue to enter the museum using turnstile
+                    if(museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM
+                            && museum.getNEEntranceTurnstile().getQueue().size() < Constant.TURNSTILE_NUM){
+                        if (EntranceUtils.toSouthEntrance()) { //randomly assigned the visitor to south or north turnstile
                             museum.getSEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);
                         } else {
                             museum.getNEEntranceTurnstile().addVisitor(localCurrentTime, nextVisitor);

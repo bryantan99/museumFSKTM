@@ -24,7 +24,7 @@ public class EntranceTurnstile extends Turnstile {
             System.out.println("Museum is not operating.");
             return;
         }
-
+        //
         if (museum.getVisitorList().size() >= Constant.MAX_VISITOR_IN_MUSEUM) {
             String fullCapacityMsg = "Museum is full. Current capacity : " + museum.getVisitorList().size() + " / " + Constant.MAX_VISITOR_IN_MUSEUM;
             System.out.println(fullCapacityMsg);
